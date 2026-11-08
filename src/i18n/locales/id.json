@@ -248,6 +248,15 @@
           "mediaOpen": "Tutup terlebih dahulu media yang sedang Anda kerjakan, karena media tersebut menggunakan cache.",
           "cleared": "Semua cache telah dihapus.",
           "failed": "Terjadi masalah saat menghapus cache."
+        },
+        "workFolder": {
+          "title": "Folder kerja sementara",
+          "description": "Pilih folder induk. Setelah dimulai ulang, CompressO memakai subfolder CompressO-work miliknya sendiri. File kerja yang ada tetap di lokasi lama.",
+          "choose": "Pilih folder",
+          "restart": "Mulai ulang CompressO untuk memakai {{path}}.",
+          "current": "Folder saat ini: {{path}}",
+          "failed": "Folder itu tidak dapat digunakan. Periksa izin tulis dan pilih lokasi dengan subfolder CompressO-work yang kosong.",
+          "loadFailed": "Pengaturan folder kerja tidak dapat dibaca."
         }
       },
       "savedFiles": {

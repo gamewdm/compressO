@@ -248,6 +248,15 @@
           "mediaOpen": "请先关闭正在处理的媒体，因为它正在使用缓存。",
           "cleared": "已清除所有缓存。",
           "failed": "清除缓存时出现问题。"
+        },
+        "workFolder": {
+          "title": "临时工作文件夹",
+          "description": "请选择父文件夹。重启后，CompressO 将使用其中专用的 CompressO-work 子文件夹。现有工作文件会保留在原位置。",
+          "choose": "选择文件夹",
+          "restart": "请重启 CompressO 以使用 {{path}}。",
+          "current": "当前文件夹：{{path}}",
+          "failed": "无法使用此文件夹。请检查写入权限，并选择 CompressO-work 子文件夹为空的位置。",
+          "loadFailed": "无法读取工作文件夹设置。"
         }
       },
       "savedFiles": {

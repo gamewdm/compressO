@@ -248,6 +248,15 @@
           "mediaOpen": "Önbelleği kullandığı için önce üzerinde çalıştığınız medyayı kapatın.",
           "cleared": "Önbelleğin tamamı temizlendi.",
           "failed": "Önbellek temizlenirken bir sorun oluştu."
+        },
+        "workFolder": {
+          "title": "Geçici çalışma klasörü",
+          "description": "Bir üst klasör seçin. CompressO yeniden başlatıldıktan sonra kendi CompressO-work alt klasörünü kullanır. Mevcut çalışma dosyaları eski konumda kalır.",
+          "choose": "Klasör seç",
+          "restart": "{{path}} konumunu kullanmak için CompressO uygulamasını yeniden başlatın.",
+          "current": "Geçerli klasör: {{path}}",
+          "failed": "Bu klasör kullanılamadı. Yazma iznini kontrol edin ve CompressO-work alt klasörü boş olan bir konum seçin.",
+          "loadFailed": "Çalışma klasörü ayarı okunamadı."
         }
       },
       "savedFiles": {

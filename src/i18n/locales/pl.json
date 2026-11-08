@@ -248,6 +248,15 @@
           "mediaOpen": "Najpierw zamknij multimedia, nad którymi pracujesz, ponieważ korzystają z pamięci podręcznej.",
           "cleared": "Pamięć podręczna została wyczyszczona.",
           "failed": "Wystąpił problem podczas czyszczenia pamięci podręcznej."
+        },
+        "workFolder": {
+          "title": "Tymczasowy folder roboczy",
+          "description": "Wybierz folder nadrzędny. Po ponownym uruchomieniu CompressO użyje własnego podfolderu CompressO-work. Istniejące pliki robocze pozostaną w starej lokalizacji.",
+          "choose": "Wybierz folder",
+          "restart": "Uruchom ponownie CompressO, aby używać {{path}}.",
+          "current": "Bieżący folder: {{path}}",
+          "failed": "Nie można użyć tego folderu. Sprawdź uprawnienia do zapisu i wybierz lokalizację z pustym podfolderem CompressO-work.",
+          "loadFailed": "Nie można odczytać ustawienia folderu roboczego."
         }
       },
       "savedFiles": {

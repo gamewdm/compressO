@@ -248,6 +248,15 @@
           "mediaOpen": "Hãy đóng tệp phương tiện đang xử lý trước, vì nó đang dùng bộ nhớ đệm.",
           "cleared": "Đã xóa toàn bộ bộ nhớ đệm.",
           "failed": "Đã xảy ra sự cố khi xóa bộ nhớ đệm."
+        },
+        "workFolder": {
+          "title": "Thư mục làm việc tạm thời",
+          "description": "Chọn thư mục cha. Sau khi khởi động lại, CompressO sẽ dùng thư mục con CompressO-work riêng. Các tệp làm việc hiện có vẫn ở vị trí cũ.",
+          "choose": "Chọn thư mục",
+          "restart": "Khởi động lại CompressO để dùng {{path}}.",
+          "current": "Thư mục hiện tại: {{path}}",
+          "failed": "Không thể dùng thư mục này. Hãy kiểm tra quyền ghi và chọn vị trí có thư mục con CompressO-work trống.",
+          "loadFailed": "Không thể đọc cài đặt thư mục làm việc."
         }
       },
       "savedFiles": {

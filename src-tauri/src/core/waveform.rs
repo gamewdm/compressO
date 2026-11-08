@@ -7,7 +7,7 @@ use sha2::{Digest, Sha256};
 use std::path::Path;
 use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex};
-use tauri::{Listener, Manager};
+use tauri::Listener;
 
 const HZ: usize = 50;
 const MAX_SECONDS: f64 = 300.0;
@@ -195,11 +195,7 @@ pub async fn get_audio_waveform(
         return Err("CANCELLED".into());
     }
     let source = std::fs::canonicalize(&path).map_err(|e| e.to_string())?;
-    let directory = app
-        .path()
-        .app_cache_dir()
-        .map_err(|e| e.to_string())?
-        .join("waveforms-v1");
+    let directory = crate::sys::fs::ensure_assets_dir(&app)?.join("waveforms-v1");
     std::fs::create_dir_all(&directory).map_err(|e| e.to_string())?;
     let key = cache_key(&source, track, chunk, chunk_seconds)?;
     let cache = directory.join(format!("{key}.bin"));

@@ -248,6 +248,15 @@
           "mediaOpen": "Close the media you are working on first, as it uses the cache.",
           "cleared": "All cache was cleared.",
           "failed": "There was a problem clearing cache."
+        },
+        "workFolder": {
+          "title": "Temporary work folder",
+          "description": "Choose a parent folder. CompressO uses its own CompressO-work subfolder after restarting. Existing work files stay in the old location.",
+          "choose": "Choose folder",
+          "restart": "Restart CompressO to use {{path}}.",
+          "current": "Current folder: {{path}}",
+          "failed": "Could not use that folder. Check write access and choose a location with an empty CompressO-work subfolder.",
+          "loadFailed": "Could not read the work folder setting."
         }
       },
       "savedFiles": {

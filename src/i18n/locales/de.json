@@ -248,6 +248,15 @@
           "mediaOpen": "Schließen Sie zuerst die Medien, an denen Sie arbeiten, da sie den Cache verwenden.",
           "cleared": "Der gesamte Cache wurde geleert.",
           "failed": "Beim Leeren des Caches ist ein Problem aufgetreten."
+        },
+        "workFolder": {
+          "title": "Temporärer Arbeitsordner",
+          "description": "Wähle einen übergeordneten Ordner. Nach einem Neustart verwendet CompressO dort den eigenen Unterordner CompressO-work. Vorhandene Arbeitsdateien bleiben am alten Speicherort.",
+          "choose": "Ordner wählen",
+          "restart": "Starte CompressO neu, um {{path}} zu verwenden.",
+          "current": "Aktueller Ordner: {{path}}",
+          "failed": "Der Ordner konnte nicht verwendet werden. Prüfe die Schreibrechte und wähle einen Speicherort mit einem leeren Unterordner CompressO-work.",
+          "loadFailed": "Die Einstellung des Arbeitsordners konnte nicht gelesen werden."
         }
       },
       "savedFiles": {

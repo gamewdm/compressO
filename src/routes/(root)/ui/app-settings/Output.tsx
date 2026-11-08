@@ -1,5 +1,6 @@
 // The item must be HeroUI's own (not a wrapper) so the Select can build its collection
 import { SelectItem } from '@heroui/react'
+import { open } from '@tauri-apps/plugin-dialog'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSnapshot } from 'valtio'
@@ -18,7 +19,12 @@ import {
   sanitizeFileNamePart,
   settingsStore,
 } from '@/stores/settingsStore'
-import { deleteCache as invokeDeleteCache } from '@/tauri/commands/fs'
+import {
+  getWorkFolder,
+  deleteCache as invokeDeleteCache,
+  setWorkFolder,
+} from '@/tauri/commands/fs'
+import type { WorkFolderInfo } from '@/types/fs'
 import { getPlatform } from '@/utils/fs'
 import { pickSaveFolder, SAVE_LOCATION_OPTIONS } from './PresetOutputFields'
 import { SettingsRow, SettingsSection } from './SettingsLayout'
@@ -37,6 +43,39 @@ function Output() {
   const { t } = useTranslation()
   const [confirmClearCache, setConfirmClearCache] = React.useState(false)
   const [isCacheDeleting, setIsCacheDeleting] = React.useState(false)
+  const [workFolder, setWorkFolderInfo] = React.useState<WorkFolderInfo | null>(
+    null,
+  )
+  const [isChangingWorkFolder, setIsChangingWorkFolder] = React.useState(false)
+
+  React.useEffect(() => {
+    getWorkFolder()
+      .then(setWorkFolderInfo)
+      .catch(() => {
+        toast.error(t('settings.output.storage.workFolder.loadFailed'))
+      })
+  }, [t])
+
+  const changeWorkFolder = async (reset = false) => {
+    setIsChangingWorkFolder(true)
+    try {
+      const folder = reset
+        ? null
+        : await open({
+            directory: true,
+            multiple: false,
+            title: t('settings.output.storage.workFolder.title'),
+          })
+      if (!reset && typeof folder !== 'string') return
+      setWorkFolderInfo(
+        await setWorkFolder(typeof folder === 'string' ? folder : null),
+      )
+    } catch {
+      toast.error(t('settings.output.storage.workFolder.failed'))
+    } finally {
+      setIsChangingWorkFolder(false)
+    }
+  }
   const {
     saveLargerOutputs,
     replaceOriginalFiles,
@@ -286,6 +325,51 @@ function Output() {
       </SettingsSection>
 
       <SettingsSection title={t('settings.output.storage.title')}>
+        <SettingsRow
+          settingId="workFolder"
+          title={t('settings.output.storage.workFolder.title')}
+          description={t('settings.output.storage.workFolder.description')}
+        >
+          <div className="flex flex-col gap-2 w-[300px] max-w-full">
+            <TextInput
+              aria-label={t('settings.output.storage.workFolder.title')}
+              value={workFolder?.nextFolder ?? ''}
+              title={workFolder?.nextFolder}
+              isReadOnly
+            />
+            <div className="flex justify-end gap-2">
+              <Button
+                size="sm"
+                onPress={() => changeWorkFolder(true)}
+                isDisabled={!workFolder?.isCustom || isChangingWorkFolder}
+              >
+                {t('common.reset')}
+              </Button>
+              <Button
+                size="sm"
+                onPress={() => changeWorkFolder()}
+                isDisabled={!workFolder || isChangingWorkFolder}
+              >
+                <Icon name="fileExplorer" />
+                {t('settings.output.storage.workFolder.choose')}
+              </Button>
+            </div>
+            {workFolder?.restartRequired ? (
+              <div className="text-xs text-warning-600 break-all" role="status">
+                <p>
+                  {t('settings.output.storage.workFolder.restart', {
+                    path: workFolder.nextFolder,
+                  })}
+                </p>
+                <p>
+                  {t('settings.output.storage.workFolder.current', {
+                    path: workFolder.currentFolder,
+                  })}
+                </p>
+              </div>
+            ) : null}
+          </div>
+        </SettingsRow>
         <SettingsRow
           settingId="clearCache"
           title={t('settings.output.storage.clearCache.title')}

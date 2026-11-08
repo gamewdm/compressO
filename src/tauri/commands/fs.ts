@@ -1,6 +1,6 @@
 import { core } from '@tauri-apps/api'
 
-import { CollectedFile, FileMetadata } from '@/types/fs'
+import { CollectedFile, FileMetadata, WorkFolderInfo } from '@/types/fs'
 
 /**
  * Starts the error of a file the system does not allow the app to read (e.g. macOS, when access to
@@ -62,6 +62,14 @@ export function showItemInFileManager(path: string) {
 
 export function deleteCache() {
   return core.invoke('delete_cache')
+}
+
+export function getWorkFolder(): Promise<WorkFolderInfo> {
+  return core.invoke('get_work_folder')
+}
+
+export function setWorkFolder(folder: string | null): Promise<WorkFolderInfo> {
+  return core.invoke('set_work_folder', { folder })
 }
 
 export function copyFileToClipboard(filePath: string) {

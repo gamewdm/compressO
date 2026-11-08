@@ -248,6 +248,15 @@
           "mediaOpen": "Fermez d’abord les médias sur lesquels vous travaillez, car ils utilisent le cache.",
           "cleared": "Tout le cache a été vidé.",
           "failed": "Un problème est survenu lors du vidage du cache."
+        },
+        "workFolder": {
+          "title": "Dossier de travail temporaire",
+          "description": "Choisissez un dossier parent. Après redémarrage, CompressO y utilisera son propre sous-dossier CompressO-work. Les fichiers de travail existants restent à leur ancien emplacement.",
+          "choose": "Choisir un dossier",
+          "restart": "Redémarrez CompressO pour utiliser {{path}}.",
+          "current": "Dossier actuel : {{path}}",
+          "failed": "Impossible d’utiliser ce dossier. Vérifiez les droits d’écriture et choisissez un emplacement avec un sous-dossier CompressO-work vide.",
+          "loadFailed": "Impossible de lire le réglage du dossier de travail."
         }
       },
       "savedFiles": {

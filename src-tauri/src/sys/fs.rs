@@ -19,17 +19,7 @@ pub fn setup_app_data_dir(app: &mut tauri::App) -> Result<PathBuf, tauri::Error>
 
 /// Ensure the assets directory exists
 pub fn ensure_assets_dir(app_handle: &tauri::AppHandle) -> Result<PathBuf, String> {
-    let app_data_dir = app_handle
-        .path()
-        .app_data_dir()
-        .map_err(|err| err.to_string())?;
-
-    let assets_dir = app_data_dir.join("assets");
-
-    fs::create_dir_all(&assets_dir)
-        .map_err(|err| format!("Failed to create assets directory: {}", err))?;
-
-    Ok(assets_dir)
+    super::work_folder::ensure_current(app_handle)
 }
 
 /// Empties (or creates) the folder holding the named copies of files put on the clipboard. Only the

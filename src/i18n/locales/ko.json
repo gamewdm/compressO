@@ -248,6 +248,15 @@
           "mediaOpen": "작업 중인 미디어가 캐시를 사용하므로 먼저 닫으십시오.",
           "cleared": "모든 캐시를 지웠습니다.",
           "failed": "캐시를 지우는 중 문제가 발생했습니다."
+        },
+        "workFolder": {
+          "title": "임시 작업 폴더",
+          "description": "상위 폴더를 선택하세요. CompressO를 다시 시작하면 해당 위치의 전용 CompressO-work 하위 폴더를 사용합니다. 기존 작업 파일은 이전 위치에 남습니다.",
+          "choose": "폴더 선택",
+          "restart": "{{path}}을(를) 사용하려면 CompressO를 다시 시작하세요.",
+          "current": "현재 폴더: {{path}}",
+          "failed": "이 폴더를 사용할 수 없습니다. 쓰기 권한을 확인하고 CompressO-work 하위 폴더가 비어 있는 위치를 선택하세요.",
+          "loadFailed": "작업 폴더 설정을 읽을 수 없습니다."
         }
       },
       "savedFiles": {

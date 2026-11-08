@@ -32,7 +32,7 @@ pub fn sync_cli_settings(app_handle: AppHandle, settings: serde_json::Value) {
 }
 
 /// Written next to the file & renamed over it, so the command line never reads half a file
-fn write_atomically(path: &Path, text: &str) -> std::io::Result<()> {
+pub(crate) fn write_atomically(path: &Path, text: &str) -> std::io::Result<()> {
     if let Some(directory) = path.parent() {
         std::fs::create_dir_all(directory)?;
     }

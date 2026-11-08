@@ -248,6 +248,15 @@
           "mediaOpen": "Chiuda prima i contenuti su cui sta lavorando, poiché usano la cache.",
           "cleared": "Tutta la cache è stata svuotata.",
           "failed": "Si è verificato un problema durante lo svuotamento della cache."
+        },
+        "workFolder": {
+          "title": "Cartella di lavoro temporanea",
+          "description": "Scegli una cartella principale. Dopo il riavvio, CompressO userà la propria sottocartella CompressO-work. I file di lavoro esistenti rimangono nella vecchia posizione.",
+          "choose": "Scegli cartella",
+          "restart": "Riavvia CompressO per usare {{path}}.",
+          "current": "Cartella attuale: {{path}}",
+          "failed": "Impossibile usare questa cartella. Controlla i permessi di scrittura e scegli una posizione con una sottocartella CompressO-work vuota.",
+          "loadFailed": "Impossibile leggere l’impostazione della cartella di lavoro."
         }
       },
       "savedFiles": {

@@ -248,6 +248,15 @@
           "mediaOpen": "Feche primeiro as mídias em que você está trabalhando, pois elas usam o cache.",
           "cleared": "Todo o cache foi limpo.",
           "failed": "Ocorreu um problema ao limpar o cache."
+        },
+        "workFolder": {
+          "title": "Pasta de trabalho temporária",
+          "description": "Escolha uma pasta principal. Após reiniciar, o CompressO usará a sua própria subpasta CompressO-work. Os arquivos de trabalho existentes permanecerão no local anterior.",
+          "choose": "Escolher pasta",
+          "restart": "Reinicie o CompressO para usar {{path}}.",
+          "current": "Pasta atual: {{path}}",
+          "failed": "Não foi possível usar essa pasta. Verifique a permissão de escrita e escolha um local com uma subpasta CompressO-work vazia.",
+          "loadFailed": "Não foi possível ler a configuração da pasta de trabalho."
         }
       },
       "savedFiles": {

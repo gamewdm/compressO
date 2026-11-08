@@ -206,6 +206,13 @@ export const SETTINGS_INDEX = {
       t('settings.output.storage.clearCache.description'),
     ],
   },
+  workFolder: {
+    page: 'output',
+    getText: (t) => [
+      t('settings.output.storage.workFolder.title'),
+      t('settings.output.storage.workFolder.description'),
+    ],
+  },
   autoCompress: {
     page: 'dropZone',
     isAvailable: hasTray,

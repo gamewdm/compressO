@@ -6,6 +6,13 @@ export type FileMetadata = {
   size: number
 }
 
+export type WorkFolderInfo = {
+  currentFolder: string
+  nextFolder: string
+  isCustom: boolean
+  restartRequired: boolean
+}
+
 /** A file from a dropped/pasted path, with its folder relative to that path */
 export type CollectedFile = {
   path: string

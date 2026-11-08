@@ -97,6 +97,14 @@ not prevent later queued items from running.
 Completed videos and comparison previews stay paused until you press Play.
 The queue is kept for the current session; it is not restored after closing the app.
 
+To put temporary work files on another drive, open **Settings → Output → Storage →
+Temporary work folder** and choose a parent folder. Choosing `D:\` uses
+`D:\CompressO-work\assets`. Fully quit CompressO (including its system tray instance)
+and reopen it to apply the change. Existing work files stay in the old location;
+saved videos still use the chosen save location. **Reset** restores the default
+work folder after a restart. Settings and installed compression tools remain in
+the app's profile folders.
+
 Run `pnpm test:compression-queue`, `pnpm tsc:check`, `pnpm i18n:check`, and
 `pnpm vite:build` to check these changes. A native app build also requires the
 Tauri/Rust prerequisites described below.

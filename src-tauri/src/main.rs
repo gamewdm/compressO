@@ -22,6 +22,7 @@ use core::server;
 use std::sync::{Arc, Mutex, OnceLock};
 use sys::fs::{self as file_system};
 use sys::quit;
+use sys::work_folder::{get_work_folder, set_work_folder};
 use tauri::{Emitter, Listener, Manager, Url};
 use tauri_plugin_fs::FsExt;
 
@@ -438,7 +439,11 @@ async fn run() {
             #[cfg(target_os = "linux")]
             app.manage(server::VideoServer::default());
             file_system::setup_app_data_dir(app)?;
-            file_system::ensure_assets_dir(&app.app_handle())?;
+            sys::work_folder::init(app.handle())?;
+            // Keep Settings accessible if a configured drive is offline; never silently use C:.
+            if let Err(err) = file_system::ensure_assets_dir(&app.app_handle()) {
+                log::error!("Could not open the work folder: {}", err);
+            }
 
             // The tray icon itself is added by the frontend, depending on the user's setting
             #[cfg(any(target_os = "macos", windows))]
@@ -561,6 +566,8 @@ async fn run() {
             get_available_path,
             delete_file,
             delete_cache,
+            get_work_folder,
+            set_work_folder,
             show_item_in_file_manager,
             copy_file_to_clipboard,
             copy_files_to_clipboard,

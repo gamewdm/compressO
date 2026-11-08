@@ -248,6 +248,15 @@
           "mediaOpen": "Cierre primero los archivos con los que está trabajando, ya que usan la caché.",
           "cleared": "Se ha borrado toda la caché.",
           "failed": "Se ha producido un problema al borrar la caché."
+        },
+        "workFolder": {
+          "title": "Carpeta de trabajo temporal",
+          "description": "Elige una carpeta principal. Tras reiniciarse, CompressO usará su propia subcarpeta CompressO-work. Los archivos de trabajo existentes permanecerán en la ubicación anterior.",
+          "choose": "Elegir carpeta",
+          "restart": "Reinicia CompressO para usar {{path}}.",
+          "current": "Carpeta actual: {{path}}",
+          "failed": "No se pudo usar esa carpeta. Comprueba los permisos de escritura y elige una ubicación con una subcarpeta CompressO-work vacía.",
+          "loadFailed": "No se pudo leer la configuración de la carpeta de trabajo."
         }
       },
       "savedFiles": {

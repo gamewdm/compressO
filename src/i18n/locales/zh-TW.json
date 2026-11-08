@@ -248,6 +248,15 @@
           "mediaOpen": "請先關閉正在處理的媒體，因為它正在使用快取。",
           "cleared": "已清除所有快取。",
           "failed": "清除快取時發生問題。"
+        },
+        "workFolder": {
+          "title": "暫存工作資料夾",
+          "description": "請選擇上層資料夾。重新啟動後，CompressO 將使用其中專用的 CompressO-work 子資料夾。現有工作檔案會保留在原位置。",
+          "choose": "選擇資料夾",
+          "restart": "請重新啟動 CompressO 以使用 {{path}}。",
+          "current": "目前的資料夾：{{path}}",
+          "failed": "無法使用此資料夾。請檢查寫入權限，並選擇 CompressO-work 子資料夾為空的位置。",
+          "loadFailed": "無法讀取工作資料夾設定。"
         }
       },
       "savedFiles": {
