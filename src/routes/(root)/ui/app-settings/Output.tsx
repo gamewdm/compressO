@@ -78,6 +78,7 @@ function Output() {
   }
   const {
     saveLargerOutputs,
+    exportEachWhenFinished,
     replaceOriginalFiles,
     preserveFolderStructure,
     copyOutputToClipboard,
@@ -197,6 +198,19 @@ function Output() {
 
       {/* How outputs are saved, for every preset */}
       <SettingsSection title={t('settings.output.savedFiles.title')}>
+        <SettingsRow
+          settingId="exportEachWhenFinished"
+          title={t('settings.output.saving.exportEach.title')}
+          description={t('settings.output.saving.exportEach.description')}
+        >
+          <Switch
+            aria-label={t('settings.output.saving.exportEach.title')}
+            isSelected={exportEachWhenFinished}
+            onValueChange={(isSelected) => {
+              settingsStore.exportEachWhenFinished = isSelected
+            }}
+          />
+        </SettingsRow>
         <SettingsRow
           settingId="preserveFolders"
           title={t('settings.output.saving.preserveFolders.title')}

@@ -196,6 +196,10 @@
           "dialogTitle": "Choose a folder to save compressed media to.",
           "title": "Folder"
         },
+        "exportEach": {
+          "title": "Export each file when finished",
+          "description": "On: export each completed file immediately. Off: export after the whole main-window queue finishes. Uses each preset’s save location; “Ask every time” stays manual."
+        },
         "preserveFolders": {
           "title": "Preserve folder structure",
           "description": "Keep the original folder structure when saving."

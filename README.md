@@ -208,3 +208,7 @@ xattr -cr /Applications/CompressO.app
 The project is licensed under <a href="./LICENSE">AGPL 3.0</a>
 
 This project bundles and uses third-party software. For complete third-party notices, licenses, and attributions, please see [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
+
+### Queue export timing
+
+In **Settings → Output → Saved files**, turn on **Export each file when finished** to move each completed main-window output from the work folder to its configured save location immediately. Leave it off (the default) to export after the whole queue finishes. This also applies to files added while processing. Each preset keeps its own destination; **Ask every time** still uses the Save button. Failed exports remain available for manual saving. Cancelling does not undo files already exported.

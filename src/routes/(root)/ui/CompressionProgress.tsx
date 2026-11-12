@@ -4,6 +4,7 @@ import clamp from 'lodash/clamp'
 import { memo, useEffect, useRef } from 'react'
 import { snapshot, useSnapshot } from 'valtio'
 
+import { settingsStore } from '@/stores/settingsStore'
 import {
   BatchMediaCompressionProgress,
   BatchMediaIndividualCompressionResult,
@@ -12,6 +13,7 @@ import {
 import { formatBytes, getOutputFileName } from '@/utils/fs'
 import { convertDurationToMilliseconds } from '@/utils/string'
 import { getOutputDuration, getOutputOptions, MediaFile } from '../-compression'
+import { autoSaveCompressedMedia } from '../-save'
 import { appProxy } from '../-state'
 
 async function updateDockProgress() {
@@ -182,6 +184,14 @@ function CompressionProgress() {
                       : lateFile
                   if (appProxy.state.media.length > 1) {
                     appProxy.takeSnapshot('batchCompressionStep')
+                  }
+
+                  if (
+                    appProxy.state.isCompressing &&
+                    settingsStore.exportEachWhenFinished &&
+                    originalMedia.id
+                  ) {
+                    void autoSaveCompressedMedia(originalMedia.id)
                   }
 
                   const allMediaCompleted = snapshot(

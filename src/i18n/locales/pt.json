@@ -196,6 +196,10 @@
           "dialogTitle": "Escolha uma pasta para salvar as mídias comprimidas.",
           "title": "Pasta"
         },
+        "exportEach": {
+          "title": "Exportar cada arquivo ao terminar",
+          "description": "Ativado: exporta cada arquivo concluído imediatamente. Desativado: exporta ao terminar toda a fila da janela principal. Usa o local de cada predefinição; “Perguntar sempre” continua manual."
+        },
         "preserveFolders": {
           "title": "Manter a estrutura de pastas",
           "description": "Manter a estrutura de pastas original ao salvar."

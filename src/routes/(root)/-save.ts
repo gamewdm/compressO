@@ -42,14 +42,16 @@ async function saveCompressedMedia(
   {
     isAutomatic = false,
     keepFolderStructure = true,
+    destinationTopFolders = new Map<string, string>(),
+    mediaId,
   }: {
     isAutomatic?: boolean
+    destinationTopFolders?: Map<string, string>
+    mediaId?: string
     /** For all media, or for each (e.g. by its preset's save location) */
     keepFolderStructure?: boolean | ((media: Media) => boolean)
   } = {},
 ) {
-  // Resolved once per save so all of a dropped folder's files go into the same top folder
-  const destinationTopFolders = new Map<string, string>()
   const savedLocations = new Set<string>()
   let lastSavedPath: string | null = null
   let savedCount = 0
@@ -59,6 +61,7 @@ async function saveCompressedMedia(
   const { media } = appProxy.state
   for (let i = 0; i < media.length; i++) {
     const mediaFile = media[i]
+    if (mediaId != null && mediaFile.id !== mediaId) continue
     const { compressedFile } = mediaFile
     if (!compressedFile?.pathRaw || compressedFile.isSaved) continue
 
@@ -310,6 +313,19 @@ export async function saveCompressedMediaWithPrompt(mediaIndex?: number) {
   }
 }
 
+let automaticSaves: Promise<void> = Promise.resolve()
+let automaticBatchId: string | null | undefined
+const automaticTopFolders = new Map<string, string>()
+
+/** Wait for individual exports before applying final results or restoring cancellation state. */
+export async function waitForAutomaticSaves() {
+  let pending: Promise<void>
+  do {
+    pending = automaticSaves
+    await pending
+  } while (pending !== automaticSaves)
+}
+
 /**
  * Saves automatically after compression when a save location is set in Settings
  * (Output -> Save location). With "Ask every time" nothing happens and the Save button is used.
@@ -319,7 +335,27 @@ export async function saveCompressedMediaWithPrompt(mediaIndex?: number) {
  * - pasted images, which only exist in the app's data folder (no original folder to save next to)
  * - outputs larger than their original, when "Skip larger outputs" is on
  */
-export async function autoSaveCompressedMedia() {
+export function autoSaveCompressedMedia(mediaId?: string) {
+  automaticSaves = automaticSaves.then(async () => {
+    if (automaticBatchId !== appProxy.state.batchId) {
+      automaticBatchId = appProxy.state.batchId
+      automaticTopFolders.clear()
+    }
+    try {
+      await runAutomaticSave(mediaId)
+    } catch {
+      appProxy.state.isSaving = false
+      toast.error(t('save.autoSaveFailed'))
+    }
+    // Cancellation must retain paths of outputs already exported.
+    if (appProxy.state.isCompressing && appProxy.state.media.length > 1) {
+      appProxy.takeSnapshot('batchCompressionStep')
+    }
+  })
+  return automaticSaves
+}
+
+async function runAutomaticSave(mediaId?: string) {
   const { saveLargerOutputs } = settingsStore
   // Each media is saved where its preset saves; those whose preset asks are left for the Save button
   if (
@@ -364,6 +400,8 @@ export async function autoSaveCompressedMedia() {
     },
     {
       isAutomatic: true,
+      mediaId,
+      destinationTopFolders: automaticTopFolders,
       // No new folders next to the originals; only a fixed folder mirrors dropped folders (when
       // "Preserve folder structure" is on)
       keepFolderStructure: (mediaFile) =>

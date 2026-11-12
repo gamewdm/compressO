@@ -196,6 +196,10 @@
           "dialogTitle": "Chọn thư mục để lưu tệp phương tiện đã nén.",
           "title": "Thư mục"
         },
+        "exportEach": {
+          "title": "Xuất từng tệp ngay khi hoàn tất",
+          "description": "Bật: xuất ngay từng tệp đã hoàn tất. Tắt: xuất sau khi toàn bộ hàng đợi trong cửa sổ chính hoàn tất. Dùng vị trí lưu của từng cấu hình; “Hỏi mỗi lần” vẫn lưu thủ công."
+        },
         "preserveFolders": {
           "title": "Giữ nguyên cấu trúc thư mục",
           "description": "Giữ nguyên cấu trúc thư mục gốc khi lưu."

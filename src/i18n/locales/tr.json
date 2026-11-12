@@ -196,6 +196,10 @@
           "dialogTitle": "Sıkıştırılan medyanın kaydedileceği bir klasör seçin.",
           "title": "Klasör"
         },
+        "exportEach": {
+          "title": "Her dosyayı tamamlandığında dışa aktar",
+          "description": "Açık: tamamlanan her dosyayı hemen dışa aktarır. Kapalı: ana penceredeki tüm kuyruk bittiğinde dışa aktarır. Her ön ayarın kayıt konumunu kullanır; “Her seferinde sor” seçeneğinde kayıt elle yapılır."
+        },
         "preserveFolders": {
           "title": "Klasör yapısını koru",
           "description": "Kaydederken orijinal klasör yapısını koru."

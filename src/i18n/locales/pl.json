@@ -196,6 +196,10 @@
           "dialogTitle": "Wybierz folder do zapisywania skompresowanych multimediów.",
           "title": "Folder"
         },
+        "exportEach": {
+          "title": "Eksportuj każdy plik po zakończeniu",
+          "description": "Włączone: eksportuj każdy ukończony plik od razu. Wyłączone: eksportuj po zakończeniu całej kolejki w głównym oknie. Używa miejsca zapisu każdego ustawienia wstępnego; „Pytaj za każdym razem” pozostaje ręczne."
+        },
         "preserveFolders": {
           "title": "Zachowaj strukturę folderów",
           "description": "Zachowaj oryginalną strukturę folderów podczas zapisywania."

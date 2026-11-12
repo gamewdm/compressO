@@ -13,6 +13,7 @@ import { CustomEvents } from '@/types/compression'
 import {
   autoCopyCompressedMediaToClipboard,
   autoSaveCompressedMedia,
+  waitForAutomaticSaves,
 } from '../-save'
 import { appProxy } from '../-state'
 
@@ -51,6 +52,7 @@ function CancelCompression() {
           appSnapShot.state.batchId,
         ],
       })
+      await waitForAutomaticSaves()
       // Media done before the cancellation, in any lane (see `compress_media_batch`)
       if (
         appProxy.state.media.length > 1 &&

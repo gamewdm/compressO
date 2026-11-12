@@ -196,6 +196,10 @@
           "dialogTitle": "Pilih folder untuk menyimpan media yang dikompresi.",
           "title": "Folder"
         },
+        "exportEach": {
+          "title": "Ekspor setiap berkas setelah selesai",
+          "description": "Aktif: langsung ekspor setiap berkas yang selesai. Nonaktif: ekspor setelah seluruh antrean jendela utama selesai. Menggunakan lokasi simpan tiap preset; “Tanya setiap kali” tetap manual."
+        },
         "preserveFolders": {
           "title": "Pertahankan struktur folder",
           "description": "Pertahankan struktur folder asli saat menyimpan."

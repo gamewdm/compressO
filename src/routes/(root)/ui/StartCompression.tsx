@@ -38,6 +38,7 @@ import { recordMainWindowHistory } from '../-history'
 import {
   autoCopyCompressedMediaToClipboard,
   autoSaveCompressedMedia,
+  waitForAutomaticSaves,
 } from '../-save'
 import {
   estimateTargetSizeVideos,
@@ -277,6 +278,9 @@ function StartCompression() {
             cancellation,
           ])) as MediaBatchCompressionResult
 
+          await waitForAutomaticSaves()
+          if (abortController.signal.aborted) throw 'CANCELLED'
+
           for (const index in appProxy.state.media) {
             if (
               !pendingMedia.some(
@@ -307,6 +311,9 @@ function StartCompression() {
                 size: formatBytes(videoResult?.fileMetadata?.size ?? 0),
                 extension: videoResult?.fileMetadata?.extension,
                 ...getOutputOptions(videoResult, video.config?.targetSizeInMB),
+                ...(video.compressedFile?.isSuccessful
+                  ? video.compressedFile
+                  : {}),
               }
             } else if (appProxy.state.media[index].type === 'image') {
               const image = appProxy.state.media[index]
@@ -329,6 +336,9 @@ function StartCompression() {
                 sizeInBytes: imageResult?.fileMetadata?.size,
                 size: formatBytes(imageResult?.fileMetadata?.size ?? 0),
                 extension: imageResult?.fileMetadata?.extension,
+                ...(image.compressedFile?.isSuccessful
+                  ? image.compressedFile
+                  : {}),
               }
             }
           }

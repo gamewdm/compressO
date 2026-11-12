@@ -196,6 +196,10 @@
           "dialogTitle": "Wählen Sie einen Ordner, in dem komprimierte Medien gespeichert werden sollen.",
           "title": "Ordner"
         },
+        "exportEach": {
+          "title": "Jede Datei nach Abschluss exportieren",
+          "description": "Ein: Jede fertige Datei sofort exportieren. Aus: Nach Abschluss der gesamten Warteschlange im Hauptfenster exportieren. Verwendet den Speicherort der jeweiligen Vorgabe; „Jedes Mal fragen“ bleibt manuell."
+        },
         "preserveFolders": {
           "title": "Ordnerstruktur beibehalten",
           "description": "Beim Speichern die ursprüngliche Ordnerstruktur beibehalten."

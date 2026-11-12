@@ -196,6 +196,10 @@
           "dialogTitle": "Elija una carpeta en la que guardar los archivos comprimidos.",
           "title": "Carpeta"
         },
+        "exportEach": {
+          "title": "Exportar cada archivo al terminar",
+          "description": "Activado: exporta cada archivo terminado inmediatamente. Desactivado: exporta al finalizar toda la cola de la ventana principal. Usa la ubicación de cada preajuste; «Preguntar siempre» sigue siendo manual."
+        },
         "preserveFolders": {
           "title": "Conservar la estructura de carpetas",
           "description": "Mantener la estructura de carpetas original al guardar."

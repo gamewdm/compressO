@@ -196,6 +196,10 @@
           "dialogTitle": "Scelga una cartella in cui salvare i contenuti compressi.",
           "title": "Cartella"
         },
+        "exportEach": {
+          "title": "Esporta ogni file al termine",
+          "description": "Attivo: esporta subito ogni file completato. Disattivo: esporta al termine dell’intera coda della finestra principale. Usa la destinazione di ogni preimpostazione; “Chiedi ogni volta” resta manuale."
+        },
         "preserveFolders": {
           "title": "Mantieni la struttura delle cartelle",
           "description": "Mantieni la struttura delle cartelle originale durante il salvataggio."

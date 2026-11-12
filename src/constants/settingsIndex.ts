@@ -150,6 +150,13 @@ export const SETTINGS_INDEX = {
       t('settings.output.saving.prefix.description'),
     ],
   },
+  exportEachWhenFinished: {
+    page: 'output',
+    getText: (t) => [
+      t('settings.output.saving.exportEach.title'),
+      t('settings.output.saving.exportEach.description'),
+    ],
+  },
   preserveFolders: {
     page: 'output',
     getText: (t) => [

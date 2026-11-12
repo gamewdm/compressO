@@ -58,6 +58,8 @@ export type SettingsState = {
    * such outputs are left for the Save button.
    */
   saveLargerOutputs: boolean
+  /** Export completed main-window outputs immediately instead of waiting for the queue. */
+  exportEachWhenFinished: boolean
   /**
    * When an output is saved under its original's exact path (same folder, no prefix, same format),
    * move the original to the Trash & keep only the output (off by default). When off, a numbered
@@ -139,6 +141,8 @@ function readSettings(): SettingsState {
         ? (storedSaveLocation as SaveLocation)
         : saveLocations.sameFolder,
     saveFolder: localStorage.getItem(constants.saveFolder),
+    exportEachWhenFinished:
+      localStorage.getItem(constants.exportEachWhenFinished) === 'true',
     // Only an explicit opt-out turns it off
     preserveFolderStructure:
       localStorage.getItem(constants.preserveFolderStructure) !== 'false',
@@ -235,6 +239,10 @@ subscribe(settingsStore, () => {
     settingsStore.outputFilePrefix,
   )
   localStorage.setItem(constants.saveLocation, settingsStore.saveLocation)
+  localStorage.setItem(
+    constants.exportEachWhenFinished,
+    String(settingsStore.exportEachWhenFinished),
+  )
   localStorage.setItem(
     constants.preserveFolderStructure,
     String(settingsStore.preserveFolderStructure),

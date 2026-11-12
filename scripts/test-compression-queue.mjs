@@ -167,8 +167,19 @@ test('Process drains appended media and preserves every result before saving', a
     '../-state': { appProxy: proxy },
     '../-history': { recordMainWindowHistory: noop },
     '../-save': {
+      waitForAutomaticSaves: async () => {
+        assert.ok(
+          calls.length > 0,
+          'Wait for exports after receiving compression results',
+        )
+      },
       autoSaveCompressedMedia: async () => {
         saves++
+        assert.equal(state.media[0].compressedFile.isSaved, true)
+        assert.equal(
+          state.media[0].compressedFile.savedPath,
+          'D:/exports/a.mp4',
+        )
         assert.equal(state.isProcessCompleted, true)
         assert.deepEqual(
           state.media.map((item) => item.compressedFile.isSuccessful),
@@ -189,7 +200,15 @@ test('Process drains appended media and preserves every result before saving', a
       async compressMediaBatch(_batchId, items) {
         calls.push(items.map((item) => item.id))
         assert.equal(state.isCompressing, true)
-        if (calls.length === 1) state.media.push(media('b'), media('c'))
+        if (calls.length === 1) {
+          state.media.push(media('b'), media('c'))
+          state.media[0].compressedFile = {
+            isSuccessful: true,
+            isSaved: true,
+            savedPath: 'D:/exports/a.mp4',
+            pathRaw: 'a',
+          }
+        }
         return {
           results: Object.fromEntries(
             items

@@ -196,6 +196,10 @@
           "dialogTitle": "Choisissez un dossier où enregistrer les médias compressés.",
           "title": "Dossier"
         },
+        "exportEach": {
+          "title": "Exporter chaque fichier dès la fin",
+          "description": "Activé : exporter chaque fichier terminé immédiatement. Désactivé : exporter après toute la file de la fenêtre principale. Utilise le dossier de chaque préréglage ; « Toujours demander » reste manuel."
+        },
         "preserveFolders": {
           "title": "Conserver la structure des dossiers",
           "description": "Conserver la structure de dossiers d’origine lors de l’enregistrement."
