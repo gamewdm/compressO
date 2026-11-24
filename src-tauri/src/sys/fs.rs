@@ -99,6 +99,14 @@ pub fn get_file_metadata(path: &str) -> Result<FileMetadata, String> {
                 .to_ascii_lowercase()
                 .as_str()
             {
+                // Header detection misses some video brands (e.g. XAVC MP4). Route them to
+                // FFprobe for validation instead of sending them to the image decoder.
+                "mp4" | "m4v" => "video/mp4".into(),
+                "mov" => "video/quicktime".into(),
+                "mkv" => "video/x-matroska".into(),
+                "webm" => "video/webm".into(),
+                "avi" => "video/x-msvideo".into(),
+                "ts" | "mts" | "m2ts" => "video/mp2t".into(),
                 "jxl" => "image/jxl".into(),
                 "heic" => "image/heic".into(),
                 "heif" => "image/heif".into(),
@@ -298,6 +306,25 @@ fn collect_dir_files(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn metadata_routes_unrecognized_mp4_brands_to_video_without_overriding_images() {
+        // Container header only, with the same XAVC brand and compatible brands as the report.
+        let xavc = b"\x00\x00\x00\x1cftypXAVC\x01\x00\x1f\xffXAVCmp42iso2";
+        assert!(infer::get(xavc).is_none());
+        let file = std::env::temp_dir().join(format!("compresso-metadata-{}.MP4", nanoid::nanoid!()));
+        std::fs::write(&file, xavc).unwrap();
+        let video_metadata = get_file_metadata(file.to_str().unwrap());
+
+        // A recognized image remains an image, even with a misleading extension.
+        std::fs::write(&file, b"GIF89a\x01\x00\x01\x00").unwrap();
+        let image_metadata = get_file_metadata(file.to_str().unwrap());
+        std::fs::remove_file(&file).unwrap();
+        let video_metadata = video_metadata.unwrap();
+        assert_eq!(video_metadata.mime_type, "video/mp4");
+        assert_eq!(video_metadata.size, xavc.len() as u64);
+        assert_eq!(image_metadata.unwrap().mime_type, "image/gif");
+    }
 
     /// A dropped folder is collected at every depth, each file with its folder relative to the
     /// dropped folder's parent (hidden files & folders aside)
