@@ -74,6 +74,19 @@ export function getLogFilePath() {
   return core.invoke<string>('get_log_file_path')
 }
 
+export type JobLogSettings = {
+  intervalSeconds: number
+  keptJobs: number
+}
+
+export function getJobLogSettings() {
+  return core.invoke<JobLogSettings>('get_job_log_settings')
+}
+
+export function setJobLogSettings(settings: JobLogSettings) {
+  return core.invoke<void>('set_job_log_settings', { settings })
+}
+
 /**
  * The native interface's texts (the menus, the quit confirmation) in the app's language, which the
  * backend shows from now on

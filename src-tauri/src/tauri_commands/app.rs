@@ -189,3 +189,13 @@ pub fn get_log_file_path() -> Result<String, String> {
     log::logger().flush();
     crate::sys::logging::log_file_path().map(|path| path.to_string_lossy().to_string())
 }
+
+#[tauri::command]
+pub fn get_job_log_settings(app: AppHandle) -> Result<crate::sys::job_logs::Settings, String> {
+    crate::sys::job_logs::settings(&app)
+}
+
+#[tauri::command]
+pub fn set_job_log_settings(app: AppHandle, settings: crate::sys::job_logs::Settings) -> Result<(), String> {
+    crate::sys::job_logs::set_settings(&app, settings)
+}

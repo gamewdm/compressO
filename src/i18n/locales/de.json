@@ -107,6 +107,18 @@
           "description": "Eine Aufzeichnung dessen, was die App getan hat, die hilft, die Ursache eines Problems zu finden. Fügen Sie sie bei der Meldung eines Problems bei. Sie enthalten die Namen der komprimierten Dateien.",
           "button": "Protokolldateien anzeigen",
           "failed": "Die Protokolldateien konnten nicht angezeigt werden."
+        },
+        "jobLogs": {
+          "intervalTitle": "Intervall der Leistungsprotokolle",
+          "intervalDescription": "Wie oft Leistungsdaten aufgezeichnet werden. Gilt für neue Aufträge.",
+          "interval30": "30 Sekunden",
+          "interval60": "60 Sekunden",
+          "interval300": "5 Minuten",
+          "interval600": "10 Minuten",
+          "retentionTitle": "Aufzubewahrende Auftragsprotokolle",
+          "retentionDescription": "Jede Datei in einer Warteschlange zählt als ein Auftrag, auch fehlgeschlagene und abgebrochene Aufträge. Die neuesten beendeten und alle aktiven Aufträge bleiben erhalten. Ein niedrigerer Wert entfernt ältere Auftragsprotokolle.",
+          "invalidCount": "Gib eine ganze Zahl von 1 bis 1000 ein.",
+          "failed": "Die Einstellungen für Auftragsprotokolle konnten nicht geladen oder gespeichert werden."
         }
       }
     },
@@ -858,8 +870,13 @@
     "addAfterCompression": "Nach der Komprimierung können keine Medien hinzugefügt werden. Starten Sie eine neue Komprimierung, um weitere Medien hinzuzufügen.",
     "noValidFiles": "Keine gültigen Mediendateien gefunden.",
     "alreadyAdded": "Die ausgewählten Medien wurden bereits hinzugefügt.",
-    "someCorrupted": "Einige Dateien scheinen beschädigt oder ungültig zu sein und wurden nicht hinzugefügt.",
-    "corrupted": "Die Datei scheint beschädigt oder ungültig zu sein.",
+    "someCorrupted": "Einige Dateien konnten nicht geladen werden. Die Gründe stehen unten.",
+    "corrupted": "Die Datei konnte nicht geladen werden. Der Grund steht unten.",
+    "importMetadata": "Metadaten lesen",
+    "importThumbnail": "Vorschaubild erstellen",
+    "importSettings": "Videoeinstellungen vorbereiten",
+    "importTimeout": "Das Laden hat das Zeitlimit von 60 Sekunden überschritten.",
+    "importInvalid": "Der Datei fehlen Metadaten oder sie ist zu klein für den Import.",
     "selectTitle": "Bilder, Videos oder Audiodateien zum Komprimieren auswählen.",
     "selectFailed": "Die Medien konnten nicht ausgewählt werden.",
     "invalidFiles": "Ungültige Dateien oder Ordner",

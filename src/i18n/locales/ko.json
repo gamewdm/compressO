@@ -107,6 +107,18 @@
           "description": "앱이 수행한 작업의 기록으로, 문제의 원인을 찾는 데 도움이 됩니다. 문제를 보고할 때 첨부하십시오. 압축한 파일의 이름이 포함되어 있습니다.",
           "button": "로그 파일 보기",
           "failed": "로그 파일을 표시할 수 없습니다."
+        },
+        "jobLogs": {
+          "intervalTitle": "성능 로그 기록 간격",
+          "intervalDescription": "성능 데이터를 기록하는 빈도입니다. 새 작업에 적용됩니다.",
+          "interval30": "30초",
+          "interval60": "60초",
+          "interval300": "5분",
+          "interval600": "10분",
+          "retentionTitle": "보관할 작업 로그 수",
+          "retentionDescription": "대기열의 각 파일을 하나의 작업으로 계산하며 실패하거나 취소된 작업도 포함합니다. 가장 최근에 종료된 작업과 모든 진행 중인 작업을 보관합니다. 값을 줄이면 오래된 작업 로그가 삭제됩니다.",
+          "invalidCount": "1부터 1000까지의 정수를 입력하세요.",
+          "failed": "작업 로그 설정을 불러오거나 저장할 수 없습니다."
         }
       }
     },
@@ -850,8 +862,13 @@
     "addAfterCompression": "압축 후에는 미디어를 추가할 수 없습니다. 미디어를 더 추가하려면 새 압축을 시작하십시오.",
     "noValidFiles": "유효한 미디어 파일을 찾을 수 없습니다.",
     "alreadyAdded": "선택한 미디어가 이미 추가되어 있습니다.",
-    "someCorrupted": "일부 파일이 손상되었거나 유효하지 않아 추가되지 않았습니다.",
-    "corrupted": "파일이 손상되었거나 유효하지 않습니다.",
+    "someCorrupted": "일부 파일을 불러올 수 없습니다. 아래에서 이유를 확인하세요.",
+    "corrupted": "파일을 불러올 수 없습니다. 아래에서 이유를 확인하세요.",
+    "importMetadata": "메타데이터 읽기",
+    "importThumbnail": "썸네일 생성",
+    "importSettings": "동영상 설정 준비",
+    "importTimeout": "불러오기가 60초 제한을 초과했습니다.",
+    "importInvalid": "메타데이터가 없거나 파일이 너무 작아 가져올 수 없습니다.",
     "selectTitle": "압축할 이미지, 비디오 또는 오디오를 선택하십시오.",
     "selectFailed": "미디어를 선택할 수 없습니다.",
     "invalidFiles": "유효하지 않은 파일 또는 폴더",

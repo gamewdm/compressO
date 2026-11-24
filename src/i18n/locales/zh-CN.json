@@ -107,6 +107,18 @@
           "description": "应用操作的记录，有助于找出问题原因。报告问题时请附上日志文件。其中包含您压缩过的文件名称。",
           "button": "显示日志文件",
           "failed": "无法显示日志文件。"
+        },
+        "jobLogs": {
+          "intervalTitle": "性能日志记录间隔",
+          "intervalDescription": "记录性能数据的频率。适用于新任务。",
+          "interval30": "30 秒",
+          "interval60": "60 秒",
+          "interval300": "5 分钟",
+          "interval600": "10 分钟",
+          "retentionTitle": "保留的任务日志数量",
+          "retentionDescription": "队列中的每个文件都算一个任务，包括失败和已取消的任务。保留最近结束的任务以及所有正在运行的任务。调低此值会删除较旧的任务日志。",
+          "invalidCount": "请输入 1 到 1000 之间的整数。",
+          "failed": "无法加载或保存任务日志设置。"
         }
       }
     },
@@ -850,8 +862,13 @@
     "addAfterCompression": "压缩完成后无法添加媒体。请开始新的压缩以添加更多媒体。",
     "noValidFiles": "未找到有效的媒体文件。",
     "alreadyAdded": "所选媒体已添加。",
-    "someCorrupted": "部分文件似乎已损坏或无效，未被添加。",
-    "corrupted": "该文件似乎已损坏或无效。",
+    "someCorrupted": "部分文件无法加载。原因如下。",
+    "corrupted": "无法加载该文件。原因如下。",
+    "importMetadata": "读取元数据",
+    "importThumbnail": "生成缩略图",
+    "importSettings": "准备视频设置",
+    "importTimeout": "加载超过了60秒的时限。",
+    "importInvalid": "文件缺少元数据或太小，无法导入。",
     "selectTitle": "选择要压缩的图像、视频或音频。",
     "selectFailed": "无法选择媒体。",
     "invalidFiles": "无效的文件或文件夹",

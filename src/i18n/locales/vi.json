@@ -107,6 +107,18 @@
           "description": "Bản ghi các hoạt động của ứng dụng, giúp tìm ra nguyên nhân của sự cố. Hãy đính kèm khi báo cáo sự cố. Tệp chứa tên các tệp bạn đã nén.",
           "button": "Hiển thị tệp nhật ký",
           "failed": "Không thể hiển thị tệp nhật ký."
+        },
+        "jobLogs": {
+          "intervalTitle": "Khoảng thời gian ghi nhật ký hiệu năng",
+          "intervalDescription": "Tần suất ghi dữ liệu hiệu năng. Áp dụng cho các tác vụ mới.",
+          "interval30": "30 giây",
+          "interval60": "60 giây",
+          "interval300": "5 phút",
+          "interval600": "10 phút",
+          "retentionTitle": "Số nhật ký tác vụ cần giữ",
+          "retentionDescription": "Mỗi tệp trong hàng đợi là một tác vụ, kể cả tác vụ thất bại và bị hủy. Giữ các tác vụ đã kết thúc mới nhất và mọi tác vụ đang chạy. Giảm giá trị này sẽ xóa nhật ký tác vụ cũ.",
+          "invalidCount": "Nhập số nguyên từ 1 đến 1000.",
+          "failed": "Không thể tải hoặc lưu cài đặt nhật ký tác vụ."
         }
       }
     },
@@ -850,8 +862,13 @@
     "addAfterCompression": "Không thể thêm tệp phương tiện sau khi nén. Hãy bắt đầu lần nén mới để thêm tệp.",
     "noValidFiles": "Không tìm thấy tệp phương tiện hợp lệ.",
     "alreadyAdded": "Tệp phương tiện đã chọn đã được thêm.",
-    "someCorrupted": "Một số tệp có vẻ bị hỏng hoặc không hợp lệ nên chưa được thêm.",
-    "corrupted": "Tệp có vẻ bị hỏng hoặc không hợp lệ.",
+    "someCorrupted": "Không thể tải một số tệp. Xem lý do bên dưới.",
+    "corrupted": "Không thể tải tệp. Xem lý do bên dưới.",
+    "importMetadata": "Đọc siêu dữ liệu",
+    "importThumbnail": "Tạo hình thu nhỏ",
+    "importSettings": "Chuẩn bị cài đặt video",
+    "importTimeout": "Quá trình tải vượt quá giới hạn 60 giây.",
+    "importInvalid": "Tệp thiếu siêu dữ liệu hoặc quá nhỏ để nhập.",
     "selectTitle": "Chọn hình ảnh, video hoặc âm thanh để nén.",
     "selectFailed": "Không thể chọn tệp phương tiện.",
     "invalidFiles": "Tệp hoặc thư mục không hợp lệ",

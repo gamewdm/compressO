@@ -107,6 +107,18 @@
           "description": "Uygulamanın yaptıklarının kaydı; bir sorunun nedenini bulmaya yardımcı olur. Sorun bildirirken bunları ekleyin. Sıkıştırdığınız dosyaların adlarını içerirler.",
           "button": "Günlük dosyalarını göster",
           "failed": "Günlük dosyaları gösterilemedi."
+        },
+        "jobLogs": {
+          "intervalTitle": "Performans günlüğü aralığı",
+          "intervalDescription": "Performans verilerinin ne sıklıkla kaydedileceği. Yeni işlere uygulanır.",
+          "interval30": "30 saniye",
+          "interval60": "60 saniye",
+          "interval300": "5 dakika",
+          "interval600": "10 dakika",
+          "retentionTitle": "Saklanacak iş günlüğü sayısı",
+          "retentionDescription": "Kuyruktaki her dosya, başarısız ve iptal edilenler dahil bir iş sayılır. En yeni bitmiş işler ve tüm etkin işler saklanır. Bu değeri düşürmek eski iş günlüklerini siler.",
+          "invalidCount": "1 ile 1000 arasında bir tam sayı girin.",
+          "failed": "İş günlüğü ayarları yüklenemedi veya kaydedilemedi."
         }
       }
     },
@@ -858,8 +870,13 @@
     "addAfterCompression": "Sıkıştırmadan sonra medya eklenemez. Daha fazla medya eklemek için yeni bir sıkıştırma başlatın.",
     "noValidFiles": "Geçerli medya dosyası bulunamadı.",
     "alreadyAdded": "Seçilen medya zaten eklendi.",
-    "someCorrupted": "Bazı dosyalar bozuk veya geçersiz görünüyor ve eklenmedi.",
-    "corrupted": "Dosya bozuk veya geçersiz görünüyor.",
+    "someCorrupted": "Bazı dosyalar yüklenemedi. Nedenleri aşağıda görebilirsiniz.",
+    "corrupted": "Dosya yüklenemedi. Nedeni aşağıda görebilirsiniz.",
+    "importMetadata": "Meta veriler okunuyor",
+    "importThumbnail": "Küçük resim oluşturuluyor",
+    "importSettings": "Video ayarları hazırlanıyor",
+    "importTimeout": "Yükleme 60 saniyelik sınırı aştı.",
+    "importInvalid": "Dosyanın meta verileri eksik veya dosya içe aktarmak için çok küçük.",
     "selectTitle": "Sıkıştırılacak görüntüleri, videoları veya sesleri seçin.",
     "selectFailed": "Medya seçilemedi.",
     "invalidFiles": "Geçersiz dosyalar veya klasörler",

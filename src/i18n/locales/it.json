@@ -107,6 +107,18 @@
           "description": "Una registrazione delle operazioni dell’app, utile per individuare la causa di un problema. Li alleghi quando segnala un problema. Contengono i nomi dei file compressi.",
           "button": "Mostra i file di log",
           "failed": "Non è stato possibile mostrare i file di log."
+        },
+        "jobLogs": {
+          "intervalTitle": "Intervallo dei log delle prestazioni",
+          "intervalDescription": "Frequenza di registrazione dei dati sulle prestazioni. Si applica ai nuovi processi.",
+          "interval30": "30 secondi",
+          "interval60": "60 secondi",
+          "interval300": "5 minuti",
+          "interval600": "10 minuti",
+          "retentionTitle": "Log dei processi da conservare",
+          "retentionDescription": "Ogni file in coda conta come un processo, inclusi quelli non riusciti e annullati. Conserva i processi terminati più recenti e tutti quelli attivi. Ridurre questo valore elimina i log più vecchi.",
+          "invalidCount": "Inserisci un numero intero da 1 a 1000.",
+          "failed": "Impossibile caricare o salvare le impostazioni dei log dei processi."
         }
       }
     },
@@ -866,8 +878,13 @@
     "addAfterCompression": "Non è possibile aggiungere contenuti dopo la compressione. Avvii una nuova compressione per aggiungerne altri.",
     "noValidFiles": "Nessun file multimediale valido trovato.",
     "alreadyAdded": "I contenuti selezionati sono già stati aggiunti.",
-    "someCorrupted": "Alcuni file sembrano danneggiati o non validi e non sono stati aggiunti.",
-    "corrupted": "Il file sembra danneggiato o non valido.",
+    "someCorrupted": "Impossibile caricare alcuni file. Vedi i motivi sotto.",
+    "corrupted": "Impossibile caricare il file. Vedi il motivo sotto.",
+    "importMetadata": "Lettura dei metadati",
+    "importThumbnail": "Generazione della miniatura",
+    "importSettings": "Preparazione delle impostazioni video",
+    "importTimeout": "Il caricamento ha superato il limite di 60 secondi.",
+    "importInvalid": "Il file non ha metadati o è troppo piccolo per essere importato.",
     "selectTitle": "Selezioni immagini, video o audio da comprimere.",
     "selectFailed": "Non è stato possibile selezionare i contenuti.",
     "invalidFiles": "File o cartelle non validi",

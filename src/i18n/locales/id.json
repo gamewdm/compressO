@@ -107,6 +107,18 @@
           "description": "Catatan tentang apa yang dilakukan aplikasi, yang membantu menemukan penyebab masalah. Sertakan file ini saat melaporkan masalah. File ini berisi nama file yang Anda kompresi.",
           "button": "Tampilkan file log",
           "failed": "File log tidak dapat ditampilkan."
+        },
+        "jobLogs": {
+          "intervalTitle": "Interval log kinerja",
+          "intervalDescription": "Seberapa sering data kinerja dicatat. Berlaku untuk pekerjaan baru.",
+          "interval30": "30 detik",
+          "interval60": "60 detik",
+          "interval300": "5 menit",
+          "interval600": "10 menit",
+          "retentionTitle": "Jumlah log pekerjaan yang disimpan",
+          "retentionDescription": "Setiap file dalam antrean dihitung sebagai satu pekerjaan, termasuk yang gagal dan dibatalkan. Menyimpan pekerjaan selesai terbaru serta semua pekerjaan aktif. Menurunkan nilai ini menghapus log pekerjaan lama.",
+          "invalidCount": "Masukkan bilangan bulat dari 1 hingga 1000.",
+          "failed": "Tidak dapat memuat atau menyimpan pengaturan log pekerjaan."
         }
       }
     },
@@ -850,8 +862,13 @@
     "addAfterCompression": "Media tidak dapat ditambahkan setelah kompresi. Mulai kompresi baru untuk menambahkan media lainnya.",
     "noValidFiles": "File media yang valid tidak ditemukan.",
     "alreadyAdded": "Media yang dipilih sudah ditambahkan.",
-    "someCorrupted": "Beberapa file tampaknya rusak atau tidak valid dan tidak ditambahkan.",
-    "corrupted": "File tampaknya rusak atau tidak valid.",
+    "someCorrupted": "Beberapa berkas tidak dapat dimuat. Lihat alasannya di bawah.",
+    "corrupted": "Berkas tidak dapat dimuat. Lihat alasannya di bawah.",
+    "importMetadata": "Membaca metadata",
+    "importThumbnail": "Membuat gambar mini",
+    "importSettings": "Menyiapkan pengaturan video",
+    "importTimeout": "Pemuatan melebihi batas 60 detik.",
+    "importInvalid": "Metadata berkas tidak tersedia atau berkas terlalu kecil untuk diimpor.",
     "selectTitle": "Pilih gambar, video, atau audio untuk dikompresi.",
     "selectFailed": "Media tidak dapat dipilih.",
     "invalidFiles": "File atau folder tidak valid",

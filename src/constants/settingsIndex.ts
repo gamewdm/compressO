@@ -130,6 +130,20 @@ export const SETTINGS_INDEX = {
       t('settings.general.troubleshooting.logFiles.description'),
     ],
   },
+  jobLogInterval: {
+    page: 'general',
+    getText: (t) => [
+      t('settings.general.troubleshooting.jobLogs.intervalTitle'),
+      t('settings.general.troubleshooting.jobLogs.intervalDescription'),
+    ],
+  },
+  jobLogRetention: {
+    page: 'general',
+    getText: (t) => [
+      t('settings.general.troubleshooting.jobLogs.retentionTitle'),
+      t('settings.general.troubleshooting.jobLogs.retentionDescription'),
+    ],
+  },
   saveLocation: {
     page: 'output',
     getText: (t) => [

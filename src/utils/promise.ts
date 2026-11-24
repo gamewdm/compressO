@@ -2,6 +2,7 @@
 export class TimeoutError extends Error {
   constructor() {
     super('The operation took too long.')
+    Object.setPrototypeOf(this, new.target.prototype)
     this.name = 'TimeoutError'
   }
 }

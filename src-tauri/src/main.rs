@@ -29,7 +29,7 @@ use tauri_plugin_fs::FsExt;
 use tauri_commands::{
     app::{
         get_log_file_path, get_open_at_login, log_error, open_files_access_settings, open_login_items_settings, restart_app, set_keep_awake_settings,
-        set_native_texts,
+        set_native_texts, get_job_log_settings, set_job_log_settings,
         set_open_at_login, take_opened_at_login, OPENED_AT_LOGIN_ARG,
     },
     compression_status::{
@@ -410,6 +410,9 @@ async fn run() {
                 Err(e) => eprintln!("Failed to start logging: {}", e),
             }
             sys::logging::log_app_start(app.handle());
+            if let Err(error) = sys::job_logs::settings(app.handle()) {
+                log::warn!("Could not initialize job logs: {error}");
+            }
             if let Err(err) = sys::logging::start_crash_reporting() {
                 log::error!("Failed to start crash reporting: {}", err);
             }
@@ -601,6 +604,8 @@ async fn run() {
             open_login_items_settings,
             open_files_access_settings,
             get_log_file_path,
+            get_job_log_settings,
+            set_job_log_settings,
             log_error,
             set_native_texts,
             #[cfg(target_os = "linux")]

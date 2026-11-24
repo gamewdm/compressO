@@ -31,6 +31,7 @@ pub struct FFMPEG {
     input_range: Option<(f64, f64)>,
     /// Overrides the hardware acceleration setting, see `with_hardware_acceleration`
     hardware_acceleration: Option<bool>,
+    is_estimate: bool,
 }
 
 const EXTENSIONS: [&str; 10] = [
@@ -101,6 +102,7 @@ impl FFMPEG {
             owner_window: String::from("main"),
             input_range: None,
             hardware_acceleration: None,
+            is_estimate: false,
         })
     }
 
@@ -121,6 +123,7 @@ impl FFMPEG {
     /// of decoding up to it, e.g. for the samples of `estimate_video_size`
     pub fn with_input_range(mut self, range: Option<(f64, f64)>) -> Self {
         self.input_range = range;
+        self.is_estimate = true;
         self
     }
 
@@ -180,6 +183,67 @@ impl FFMPEG {
         speed: Option<f32>,
         target_size: Option<&TargetSize>,
         dynamic_range: Option<&ImageDynamicRangeConfig>,
+    ) -> Result<VideoCompressionResult, String> {
+        let mut job_log = if self.is_estimate {
+            None
+        } else {
+            crate::sys::job_logs::JobLog::start(&self.app, video_path, video_id, batch_id)
+        };
+
+        let result = self.compress_video_inner(
+            video_path,
+            convert_to_extension,
+            preset_name,
+            video_id,
+            batch_id,
+            audio_config,
+            quality,
+            dimensions,
+            fps,
+            video_codec,
+            transform_history,
+            strip_metadata,
+            metadata_config,
+            custom_thumbnail_path,
+            trim_segments,
+            subtitles_config,
+            speed,
+            target_size,
+            dynamic_range,
+            job_log.as_ref(),
+        ).await;
+        if let Some(job) = job_log.as_mut() {
+            match &result {
+                Ok(_) => job.finish("completed"),
+                Err(error) if error == "CANCELLED" => job.finish("cancelled"),
+                Err(error) => job.finish(&format!("failed error={error}")),
+            }
+        }
+        result
+    }
+
+    async fn compress_video_inner(
+        &mut self,
+        video_path: &str,
+        convert_to_extension: &str,
+        preset_name: Option<&str>,
+        video_id: &str,
+        batch_id: Option<&str>,
+        audio_config: &AudioConfig,
+        quality: u16,
+        dimensions: Option<(f64, f64)>,
+        fps: Option<&str>,
+        video_codec: Option<&str>,
+        transform_history: Option<&MediaTransformHistory>,
+        strip_metadata: Option<bool>,
+        metadata_config: Option<&MediaMetadataConfig>,
+        custom_thumbnail_path: Option<&str>,
+        trim_segments: Option<&Vec<VideoTrimSegment>>,
+        subtitles_config: Option<&SubtitlesConfig>,
+        speed: Option<f32>,
+        target_size: Option<&TargetSize>,
+        dynamic_range: Option<&ImageDynamicRangeConfig>,
+        job_log: Option<&crate::sys::job_logs::JobLog>,
     ) -> Result<VideoCompressionResult, String> {
         let is_audio_target = AUDIO_EXTENSIONS.contains(&convert_to_extension);
         let requested_audio_codec = audio_config.audio_codec.as_deref();
@@ -322,7 +386,11 @@ impl FFMPEG {
             "-",
             "-nostats",
             "-loglevel",
-            "error",
+            if self.is_estimate {
+                "error"
+            } else {
+                "info"
+            },
         ]);
 
         // The GIF is converted from an intermediate video encoded as fast as possible
@@ -1104,7 +1172,7 @@ impl FFMPEG {
         cmd_args.extend_from_slice(&["-y", &output_path]);
 
         // The parts compressed for an estimate are many & short, so they are not logged as usual
-        let log_level = if self.input_range.is_some() {
+        let log_level = if self.is_estimate {
             log::Level::Debug
         } else {
             log::Level::Info
@@ -1254,6 +1322,13 @@ impl FFMPEG {
                 let executor = MediaProcessExecutorBuilder::new(self.app.clone())
                     .owner_window(&self.owner_window)
                     .command(ffmpeg_cmd)
+                    .with_diagnostics(
+                        (!self.is_estimate).then(|| format!(
+                            "video={video_id} batch={batch_id} pass={} attempt={} encoder={}",
+                            size_attempt + 1, attempt + 1, hardware_encoder_name.unwrap_or(&output_codec),
+                        )),
+                        job_log.map(|job| job.sink.clone()),
+                    )
                     .with_cancel_support(
                         vec![video_id.to_string(), batch_id.clone()],
                         Some(cancel_callback.clone()),
@@ -1448,6 +1523,7 @@ impl FFMPEG {
             file_metadata: file_metadata.ok(),
             other_outputs,
         })
+
     }
 
     /// About the size a video comes out at with its settings (`config`, compressed by quality), in
@@ -1789,11 +1865,7 @@ impl FFMPEG {
             .command(ffmpeg_cmd)
             .build()?;
 
-        let result = executor.spawn_and_wait().await?;
-
-        if !result.success() {
-            return Err("Video is corrupted or thumbnail generation failed".to_string());
-        }
+        executor.spawn_and_wait_with_error_output().await?;
 
         Ok(VideoThumbnail {
             id,

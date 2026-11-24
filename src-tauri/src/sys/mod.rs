@@ -9,6 +9,7 @@ pub mod keep_awake;
 #[cfg(target_os = "linux")]
 pub mod linux_clipboard;
 pub mod logging;
+pub mod job_logs;
 pub mod native_text;
 pub mod output_registry;
 pub mod quit;

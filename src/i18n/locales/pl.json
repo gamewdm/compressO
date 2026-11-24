@@ -107,6 +107,18 @@
           "description": "Zapis działań aplikacji, który pomaga znaleźć przyczynę problemu. Dołącz je przy zgłaszaniu problemu. Zawierają nazwy skompresowanych plików.",
           "button": "Pokaż pliki dziennika",
           "failed": "Nie udało się pokazać plików dziennika."
+        },
+        "jobLogs": {
+          "intervalTitle": "Odstęp zapisu danych wydajności",
+          "intervalDescription": "Częstotliwość zapisywania danych wydajności. Dotyczy nowych zadań.",
+          "interval30": "30 sekund",
+          "interval60": "60 sekund",
+          "interval300": "5 minut",
+          "interval600": "10 minut",
+          "retentionTitle": "Liczba przechowywanych dzienników zadań",
+          "retentionDescription": "Każdy plik w kolejce to jedno zadanie, także zadania nieudane i anulowane. Zachowywane są najnowsze zakończone zadania oraz wszystkie aktywne. Zmniejszenie tej wartości usuwa starsze dzienniki.",
+          "invalidCount": "Wpisz liczbę całkowitą od 1 do 1000.",
+          "failed": "Nie udało się wczytać lub zapisać ustawień dzienników zadań."
         }
       }
     },
@@ -874,8 +886,13 @@
     "addAfterCompression": "Po kompresji nie można dodawać multimediów. Rozpocznij nową kompresję, aby dodać więcej.",
     "noValidFiles": "Nie znaleziono prawidłowych plików multimedialnych.",
     "alreadyAdded": "Wybrane multimedia zostały już dodane.",
-    "someCorrupted": "Niektóre pliki wydają się uszkodzone lub nieprawidłowe i nie zostały dodane.",
-    "corrupted": "Plik wydaje się uszkodzony lub nieprawidłowy.",
+    "someCorrupted": "Nie udało się wczytać niektórych plików. Powody podano poniżej.",
+    "corrupted": "Nie udało się wczytać pliku. Powód podano poniżej.",
+    "importMetadata": "Odczytywanie metadanych",
+    "importThumbnail": "Generowanie miniatury",
+    "importSettings": "Przygotowywanie ustawień wideo",
+    "importTimeout": "Wczytywanie przekroczyło limit 60 sekund.",
+    "importInvalid": "Brakuje metadanych lub plik jest zbyt mały do zaimportowania.",
     "selectTitle": "Wybierz obrazy, filmy lub audio do kompresji.",
     "selectFailed": "Nie udało się wybrać multimediów.",
     "invalidFiles": "Nieprawidłowe pliki lub foldery",

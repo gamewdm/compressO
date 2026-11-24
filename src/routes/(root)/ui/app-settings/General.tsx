@@ -10,6 +10,7 @@ import Select from '@/components/Select'
 import SettingLink from '@/components/SettingLink'
 import Slider from '@/components/Slider'
 import Switch from '@/components/Switch'
+import TextInput from '@/components/TextInput'
 import { ThemeSwitcher } from '@/components/ThemeSwitcher'
 import { toast } from '@/components/Toast'
 import { useDropQueue } from '@/hooks/useDropQueue'
@@ -18,11 +19,14 @@ import { isWindowTintSupported } from '@/hooks/useWindowTint'
 import { LANGUAGES, type LanguageCode } from '@/i18n/languages'
 import { settingsStore, TINT_OPACITY_RANGE } from '@/stores/settingsStore'
 import {
+  getJobLogSettings,
   getLogFilePath,
   getOpenAtLogin,
+  type JobLogSettings,
   type OpenAtLoginState,
   openLoginItemsSettings,
   restartApp,
+  setJobLogSettings,
   setOpenAtLogin,
 } from '@/tauri/commands/app'
 import { showItemInFileManager } from '@/tauri/commands/fs'
@@ -34,6 +38,105 @@ import { isVideoPreviewAvailable } from '@/utils/video'
 import { SettingsRow, SettingsSection } from './SettingsLayout'
 
 const { isLinux } = getPlatform()
+
+function JobLogSettingsRows() {
+  const { t } = useTranslation()
+  const [settings, setSettings] = React.useState<JobLogSettings | null>(null)
+  const [keptJobs, setKeptJobs] = React.useState('')
+  const [isSaving, setIsSaving] = React.useState(false)
+  const key = 'settings.general.troubleshooting.jobLogs' as const
+
+  React.useEffect(() => {
+    const read = () => {
+      getJobLogSettings()
+        .then((value) => {
+          setSettings(value)
+          setKeptJobs(String(value.keptJobs))
+        })
+        .catch(() => toast.error(t(`${key}.failed`)))
+    }
+    read()
+    window.addEventListener('focus', read)
+    return () => window.removeEventListener('focus', read)
+  }, [t, key])
+
+  const save = async (next: JobLogSettings) => {
+    setIsSaving(true)
+    try {
+      await setJobLogSettings(next)
+      setSettings(next)
+      setKeptJobs(String(next.keptJobs))
+    } catch {
+      setKeptJobs(String(settings?.keptJobs ?? ''))
+      toast.error(t(`${key}.failed`))
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const saveCount = () => {
+    if (!settings || isSaving) return
+    const count = Number(keptJobs)
+    if (!Number.isInteger(count) || count < 1 || count > 1000) {
+      setKeptJobs(String(settings.keptJobs))
+      toast.error(t(`${key}.invalidCount`))
+    } else if (count !== settings.keptJobs) {
+      void save({ ...settings, keptJobs: count })
+    }
+  }
+
+  return (
+    <>
+      <SettingsRow
+        settingId="jobLogInterval"
+        title={t(`${key}.intervalTitle`)}
+        description={t(`${key}.intervalDescription`)}
+      >
+        <Select
+          aria-label={t(`${key}.intervalTitle`)}
+          selectedKeys={settings ? [String(settings.intervalSeconds)] : []}
+          disallowEmptySelection
+          isDisabled={!settings || isSaving}
+          onSelectionChange={(keys) => {
+            const [value] = Array.from(keys)
+            if (settings && value) {
+              void save({ ...settings, intervalSeconds: Number(value) })
+            }
+          }}
+          size="sm"
+          className="w-[200px]"
+        >
+          {([30, 60, 300, 600] as const).map((seconds) => (
+            <SelectItem key={seconds}>
+              {t(`${key}.interval${seconds}`)}
+            </SelectItem>
+          ))}
+        </Select>
+      </SettingsRow>
+      <SettingsRow
+        settingId="jobLogRetention"
+        title={t(`${key}.retentionTitle`)}
+        description={t(`${key}.retentionDescription`)}
+      >
+        <TextInput
+          aria-label={t(`${key}.retentionTitle`)}
+          type="number"
+          min={1}
+          max={1000}
+          step={1}
+          value={keptJobs}
+          isDisabled={!settings || isSaving}
+          onValueChange={setKeptJobs}
+          onBlur={saveCount}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') event.currentTarget.blur()
+          }}
+          className="w-[100px]"
+        />
+      </SettingsRow>
+    </>
+  )
+}
 
 /** Opening the app at login, which the system keeps (also changed in its login items) */
 function StartupSection() {
@@ -391,6 +494,7 @@ function General() {
         </SettingsRow>
       </SettingsSection>
       <SettingsSection title={t('settings.general.troubleshooting.title')}>
+        <JobLogSettingsRows />
         <SettingsRow
           settingId="logFiles"
           title={t('settings.general.troubleshooting.logFiles.title')}

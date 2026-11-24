@@ -91,6 +91,8 @@ pub type StdoutCallback = Arc<dyn Fn(usize, String) + Send + Sync>;
 pub type StderrCallback = Arc<dyn Fn(usize, String) + Send + Sync>;
 
 pub struct MediaProcessExecutorBuilder {
+    diagnostic_id: Option<String>,
+    diagnostic_log: Option<Arc<crate::sys::job_logs::Sink>>,
     app: AppHandle,
     commands: Vec<Command>,
     cancel_ids: Vec<String>,
@@ -104,6 +106,8 @@ pub struct MediaProcessExecutorBuilder {
 impl MediaProcessExecutorBuilder {
     pub fn new(app: AppHandle) -> Self {
         Self {
+            diagnostic_id: None,
+            diagnostic_log: None,
             app,
             owner_window: Some(String::from("main")),
             commands: Vec::new(),
@@ -146,6 +150,17 @@ impl MediaProcessExecutorBuilder {
         self
     }
 
+    /// Periodic diagnostics for full video encodes, excluding short estimation probes.
+    pub fn with_diagnostics(
+        mut self,
+        id: Option<String>,
+        sink: Option<Arc<crate::sys::job_logs::Sink>>,
+    ) -> Self {
+        self.diagnostic_id = id;
+        self.diagnostic_log = sink;
+        self
+    }
+
     /// Window the processes belong to (the main window by default): they are stopped when it closes
     pub fn owner_window(mut self, label: &str) -> Self {
         self.owner_window = Some(label.to_string());
@@ -164,12 +179,17 @@ impl MediaProcessExecutorBuilder {
 
         // Validate incompatible flag combinations
         if self.piped {
+            if self.diagnostic_id.is_some() {
+                return Err("Encode diagnostics require a non-piped process".to_string());
+            }
             if self.commands.len() < 2 {
                 return Err("Piped mode requires at least 2 commands".to_string());
             }
         }
 
         Ok(MediaProcessExecutor {
+            diagnostic_id: self.diagnostic_id,
+            diagnostic_log: self.diagnostic_log,
             app: self.app,
             commands: self.commands,
             cancel_ids: self.cancel_ids,
@@ -183,6 +203,8 @@ impl MediaProcessExecutorBuilder {
 }
 
 pub struct MediaProcessExecutor {
+    diagnostic_id: Option<String>,
+    diagnostic_log: Option<Arc<crate::sys::job_logs::Sink>>,
     app: AppHandle,
     commands: Vec<Command>,
     cancel_ids: Vec<String>,
@@ -194,6 +216,31 @@ pub struct MediaProcessExecutor {
 }
 
 impl MediaProcessExecutor {
+    /// Import probes return the tool's actual error as well as writing it to the log.
+    pub async fn spawn_and_wait_with_error_output(mut self) -> Result<ProcessOutput, String> {
+        let tail: ErrorOutputTail = Arc::new(Mutex::new(VecDeque::new()));
+        let captured = tail.clone();
+        let previous = self.stderr_callback.take();
+        self.stderr_callback = Some(Arc::new(move |index, line| {
+            keep_error_output_line(&captured, &line);
+            if let Some(callback) = &previous {
+                callback(index, line);
+            }
+        }));
+        let output = self.spawn_and_wait_with_output().await?;
+        if !output.success() {
+            let reason = tail
+                .lock()
+                .map(|lines| lines.iter().cloned().collect::<Vec<_>>().join("\n"))
+                .unwrap_or_default();
+            return Err(format!(
+                "Process exited with code {}: {}",
+                output.code(), reason
+            ));
+        }
+        Ok(output)
+    }
+
     pub async fn spawn_and_wait(self) -> Result<ProcessExitStatus, String> {
         let (_stdout, exit_code) = self.spawn_and_wait_internal(false).await?;
         Ok(ProcessExitStatus { exit_code })
@@ -231,9 +278,19 @@ impl MediaProcessExecutor {
         let captured_stdout = Arc::new(Mutex::new(None));
         let command_descriptions: Vec<String> = self.commands.iter().map(describe_command).collect();
 
+        let mut diagnostics = Vec::new();
+
         for mut cmd in self.commands {
             let child = SharedChild::spawn(&mut cmd).map_err(|e| e.to_string())?;
             let cp = Arc::new(child);
+            if let Some(id) = &self.diagnostic_id {
+                diagnostics.push(super::encode_diagnostics::Diagnostics::start(
+                    id.clone(),
+                    cp.id(),
+                    &describe_command(&cmd),
+                    self.diagnostic_log.clone(),
+                ));
+            }
             register_running_process(&cp);
             processes.push(cp.clone());
         }
@@ -249,7 +306,9 @@ impl MediaProcessExecutor {
         if let Some(window) = &owner_window {
             let destroy_id = window.listen(TauriEvents::Destroyed.get_str("key").unwrap(), {
                 let processes = processes.clone();
+                let should_cancel = should_cancel.clone();
                 move |_| {
+                    *should_cancel.lock().unwrap() = true;
                     log::info!("[tauri] window destroyed, killing processes");
                     for proc in &processes {
                         proc.kill().ok();
@@ -279,11 +338,10 @@ impl MediaProcessExecutor {
 
                         if matches {
                             log::info!("Process execution requested to cancel");
+                            *should_cancel_clone.lock().unwrap() = true;
                             for proc in &processes_clone {
                                 proc.kill().ok();
                             }
-                            let mut flag = should_cancel_clone.lock().unwrap();
-                            *flag = true;
                         }
                     }
                 },
@@ -296,6 +354,9 @@ impl MediaProcessExecutor {
         for (idx, proc) in processes.iter().enumerate() {
             let proc_clone = proc.clone();
             let callback_clone = self.stderr_callback.clone();
+            let diagnostic = diagnostics.get(idx).map(|d| {
+                (self.diagnostic_id.clone().unwrap(), d.output.clone())
+            });
             let tail: ErrorOutputTail = Arc::new(Mutex::new(VecDeque::new()));
             let tail_clone = tail.clone();
             let reader = tokio::spawn(async move {
@@ -312,6 +373,12 @@ impl MediaProcessExecutor {
                                     #[cfg(debug_assertions)]
                                     log::debug!("[media:process {}] stderr: {:?}", idx, val);
                                     keep_error_output_line(&tail_clone, val);
+
+                                    if let Some((id, output)) = &diagnostic {
+                                        if let Ok(mut output) = output.lock() {
+                                            output.stderr(id, val);
+                                        }
+                                    }
 
                                     if let Some(ref callback) = callback_clone {
                                         callback(idx, val.to_string());
@@ -332,6 +399,7 @@ impl MediaProcessExecutor {
             if let Some(proc) = processes.first() {
                 let proc = proc.clone();
                 let callback = self.stdout_callback.clone().unwrap();
+                let diagnostic = diagnostics.first().map(|d| d.output.clone());
 
                 let handle = tokio::spawn(async move {
                     if let Some(stdout) = proc.take_stdout() {
@@ -346,6 +414,11 @@ impl MediaProcessExecutor {
                                     if let Ok(output) = std::str::from_utf8(&buf) {
                                         #[cfg(debug_assertions)]
                                         log::debug!("[stdout:process 0] {:?}", output);
+                                        if let Some(diagnostic) = &diagnostic {
+                                            if let Ok(mut diagnostic) = diagnostic.lock() {
+                                                diagnostic.stdout(output);
+                                            }
+                                        }
                                         callback(0, output.to_string());
                                     }
                                 }
@@ -431,6 +504,24 @@ impl MediaProcessExecutor {
         }
 
         let is_cancelled = *should_cancel.lock().unwrap();
+        // Drain stderr before recording the final tail, including cancelled encodes.
+        if !diagnostics.is_empty() {
+            for (_, reader) in &mut error_outputs {
+                if let Some(reader) = reader.take() {
+                    let _ = tokio::time::timeout(std::time::Duration::from_secs(2), reader).await;
+                }
+            }
+            let status = if is_cancelled {
+                "cancelled"
+            } else if final_exit_code == 0 {
+                "completed"
+            } else {
+                "failed"
+            };
+            for diagnostic in &mut diagnostics {
+                diagnostic.finish(status);
+            }
+        }
         if is_cancelled {
             if let Some(ref callback) = self.cancel_callback {
                 callback();

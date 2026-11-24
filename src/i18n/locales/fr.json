@@ -107,6 +107,18 @@
           "description": "Un historique des actions de l’app, qui aide à trouver la cause d’un problème. Joignez-les lorsque vous signalez un problème. Ils contiennent le nom des fichiers que vous avez compressés.",
           "button": "Afficher les fichiers journaux",
           "failed": "Les fichiers journaux n’ont pas pu être affichés."
+        },
+        "jobLogs": {
+          "intervalTitle": "Intervalle du journal de performances",
+          "intervalDescription": "Fréquence d’enregistrement des données de performances. S’applique aux nouvelles tâches.",
+          "interval30": "30 secondes",
+          "interval60": "60 secondes",
+          "interval300": "5 minutes",
+          "interval600": "10 minutes",
+          "retentionTitle": "Journaux de tâches à conserver",
+          "retentionDescription": "Chaque fichier d’une file d’attente compte comme une tâche, y compris les échecs et les annulations. Les tâches terminées les plus récentes et toutes les tâches actives sont conservées. Réduire cette valeur supprime les anciens journaux.",
+          "invalidCount": "Saisissez un nombre entier de 1 à 1000.",
+          "failed": "Impossible de charger ou d’enregistrer les paramètres des journaux de tâches."
         }
       }
     },
@@ -866,8 +878,13 @@
     "addAfterCompression": "Impossible d’ajouter des médias après la compression. Lancez une nouvelle compression pour en ajouter d’autres.",
     "noValidFiles": "Aucun fichier multimédia valide trouvé.",
     "alreadyAdded": "Les médias sélectionnés ont déjà été ajoutés.",
-    "someCorrupted": "Certains fichiers semblent endommagés ou invalides et n’ont pas été ajoutés.",
-    "corrupted": "Le fichier semble endommagé ou invalide.",
+    "someCorrupted": "Certains fichiers n’ont pas pu être chargés. Voir les raisons ci-dessous.",
+    "corrupted": "Le fichier n’a pas pu être chargé. Voir la raison ci-dessous.",
+    "importMetadata": "Lecture des métadonnées",
+    "importThumbnail": "Création de la miniature",
+    "importSettings": "Préparation des paramètres vidéo",
+    "importTimeout": "Le chargement a dépassé la limite de 60 secondes.",
+    "importInvalid": "Le fichier manque de métadonnées ou est trop petit pour être importé.",
     "selectTitle": "Sélectionnez des images, des vidéos ou de l’audio à compresser.",
     "selectFailed": "Les médias n’ont pas pu être sélectionnés.",
     "invalidFiles": "Fichiers ou dossiers non valides",

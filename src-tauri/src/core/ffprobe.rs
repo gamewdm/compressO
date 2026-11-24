@@ -60,11 +60,7 @@ impl FFPROBE {
             .command(ffprobe_cmd)
             .build()?;
 
-        let output = executor.spawn_and_wait_with_output().await?;
-
-        if !output.success() {
-            return Err("Video file is corrupted".to_string());
-        }
+        let output = executor.spawn_and_wait_with_error_output().await?;
 
         let json: Value = serde_json::from_str(&output.stdout)
             .map_err(|e| format!("Failed to parse ffprobe output: {}", e))?;

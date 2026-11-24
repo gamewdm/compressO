@@ -107,6 +107,18 @@
           "description": "A record of what the app did, which helps find the cause of a problem. Include them when reporting one. They contain the names of the files you compressed.",
           "button": "Show log files",
           "failed": "The log files could not be shown."
+        },
+        "jobLogs": {
+          "intervalTitle": "Performance log interval",
+          "intervalDescription": "How often performance data is recorded. Applies to new jobs.",
+          "interval30": "30 seconds",
+          "interval60": "60 seconds",
+          "interval300": "5 minutes",
+          "interval600": "10 minutes",
+          "retentionTitle": "Job logs to keep",
+          "retentionDescription": "Each file in a queue is one job, including failed and cancelled jobs. Keeps the newest finished jobs plus any active jobs. Lowering this removes older job logs.",
+          "invalidCount": "Enter a whole number from 1 to 1000.",
+          "failed": "Could not load or save job log settings."
         }
       }
     },
@@ -858,8 +870,13 @@
     "addAfterCompression": "Media cannot be added after compression. Start a new compression to add more media.",
     "noValidFiles": "No valid media files found.",
     "alreadyAdded": "The selected media has already been added.",
-    "someCorrupted": "Some files appear to be corrupted or invalid and were not added.",
-    "corrupted": "The file appears to be corrupted or invalid.",
+    "someCorrupted": "Some files could not be loaded. See the reasons below.",
+    "corrupted": "The file could not be loaded. See the reason below.",
+    "importMetadata": "Reading metadata",
+    "importThumbnail": "Generating thumbnail",
+    "importSettings": "Preparing video settings",
+    "importTimeout": "Loading exceeded the 60-second limit.",
+    "importInvalid": "The file is missing metadata or is too small to import.",
     "selectTitle": "Select images, videos or audio to compress.",
     "selectFailed": "Could not select media.",
     "invalidFiles": "Invalid files/folders",

@@ -757,6 +757,31 @@ impl ImageCompressor {
         config: &ImageCompressionConfig,
         batch_id: Option<&str>,
     ) -> Result<ImageCompressionResult, String> {
+        let mut job_log = crate::sys::job_logs::JobLog::start(
+            &self.app, &config.image_path, &config.image_id, batch_id,
+        );
+        if let Some(job) = &job_log {
+            job.sink.write(&format!("image settings={config:?}"));
+        }
+        let result = self.compress_image_config_inner(config, batch_id).await;
+        if let Some(job) = job_log.as_mut() {
+            match &result {
+                Ok(result) => {
+                    job.sink.write(&format!("output={result:?}"));
+                    job.finish("completed");
+                }
+                Err(error) if error == "CANCELLED" => job.finish("cancelled"),
+                Err(error) => job.finish(&format!("failed error={error}")),
+            }
+        }
+        result
+    }
+
+    async fn compress_image_config_inner(
+        &mut self,
+        config: &ImageCompressionConfig,
+        batch_id: Option<&str>,
+    ) -> Result<ImageCompressionResult, String> {
         let jpeg_output = matches!(config.convert_to_extension.as_str(), "jpg" | "jpeg");
         let preserve_range = super::image_dynamic_range::ImageDynamicRangeConfig {
             mode: super::image_dynamic_range::ImageDynamicRangeMode::Original,
@@ -887,7 +912,7 @@ impl ImageCompressor {
                     }
                     // Preprocess once, before all quality/target-size attempts. The workspace
                     // stays alive across this await and is removed on success or failure.
-                    return Box::pin(self.compress_image_config(&prepared, batch_id)).await;
+                    return Box::pin(self.compress_image_config_inner(&prepared, batch_id)).await;
                 }
             }
         }

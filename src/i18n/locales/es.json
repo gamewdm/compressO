@@ -107,6 +107,18 @@
           "description": "Un registro de lo que hizo la app, que ayuda a encontrar la causa de un problema. Inclúyalos al informar de uno. Contienen los nombres de los archivos que ha comprimido.",
           "button": "Mostrar archivos de registro",
           "failed": "No se pudieron mostrar los archivos de registro."
+        },
+        "jobLogs": {
+          "intervalTitle": "Intervalo del registro de rendimiento",
+          "intervalDescription": "Frecuencia con la que se registran los datos de rendimiento. Se aplica a los trabajos nuevos.",
+          "interval30": "30 segundos",
+          "interval60": "60 segundos",
+          "interval300": "5 minutos",
+          "interval600": "10 minutos",
+          "retentionTitle": "Registros de trabajos que se conservarán",
+          "retentionDescription": "Cada archivo de una cola cuenta como un trabajo, incluidos los fallidos y cancelados. Se conservan los trabajos finalizados más recientes y todos los activos. Reducir este valor elimina los registros más antiguos.",
+          "invalidCount": "Introduce un número entero del 1 al 1000.",
+          "failed": "No se pudieron cargar o guardar los ajustes de los registros de trabajos."
         }
       }
     },
@@ -866,8 +878,13 @@
     "addAfterCompression": "No se pueden añadir archivos después de la compresión. Inicie una nueva compresión para añadir más.",
     "noValidFiles": "No se han encontrado archivos multimedia válidos.",
     "alreadyAdded": "Los archivos seleccionados ya se han añadido.",
-    "someCorrupted": "Algunos archivos parecen estar dañados o no ser válidos y no se han añadido.",
-    "corrupted": "El archivo parece estar dañado o no ser válido.",
+    "someCorrupted": "No se pudieron cargar algunos archivos. Consulta los motivos abajo.",
+    "corrupted": "No se pudo cargar el archivo. Consulta el motivo abajo.",
+    "importMetadata": "Lectura de metadatos",
+    "importThumbnail": "Generación de miniatura",
+    "importSettings": "Preparación de ajustes de vídeo",
+    "importTimeout": "La carga superó el límite de 60 segundos.",
+    "importInvalid": "Faltan metadatos o el archivo es demasiado pequeño para importarlo.",
     "selectTitle": "Seleccione imágenes, vídeos o audio para comprimir.",
     "selectFailed": "No se pudieron seleccionar los archivos.",
     "invalidFiles": "Archivos o carpetas no válidos",

@@ -1,4 +1,5 @@
 pub mod domain;
+mod encode_diagnostics;
 pub mod ffmpeg;
 pub mod ffprobe;
 pub mod hardware_encoder;

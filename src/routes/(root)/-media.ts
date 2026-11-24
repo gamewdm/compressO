@@ -4,6 +4,7 @@ import cloneDeep from 'lodash/cloneDeep'
 
 import { toast } from '@/components/Toast'
 import { t } from '@/i18n'
+import { logError } from '@/tauri/commands/app'
 import { generateVideoThumbnail } from '@/tauri/commands/ffmpeg'
 import {
   getVideoBasicInfo,
@@ -33,7 +34,7 @@ import {
 } from '@/types/compression'
 import { CollectedFile } from '@/types/fs'
 import { formatBytes } from '@/utils/fs'
-import { withTimeout } from '@/utils/promise'
+import { TimeoutError, withTimeout } from '@/utils/promise'
 import { isVideoPreviewAvailable } from '@/utils/video'
 import {
   applyDefaultPresetsToBatchConfig,
@@ -57,6 +58,17 @@ type MediaFile = (Video & { type: 'video' }) | (Image & { type: 'image' })
  * the system never answers for cannot keep the loading screen up
  */
 const FILE_LOAD_TIMEOUT = 60_000
+
+async function importStep<T>(step: string, operation: Promise<T>): Promise<T> {
+  try {
+    return await operation
+  } catch (error) {
+    if (isPermissionDeniedError(error)) throw error
+    throw new Error(
+      `${step}: ${error instanceof Error ? error.message : String(error)}`,
+    )
+  }
+}
 
 /**
  * A random id for a media, which its cached output (and thumbnail) is named after, so outputs never
@@ -170,11 +182,14 @@ export async function addMedia(selection: MediaSelection | MediaSelection[]) {
     path: string,
     relativeDir: string,
   ): Promise<MediaFile | null> => {
-    const fileMetadata = await getFileMetadata(path)
+    const fileMetadata = await importStep(
+      t('media.importMetadata'),
+      getFileMetadata(path),
+    )
     // Audio by its extension, as the detected type is missing for some audio formats
     const mediaType = isAudioFileExtension(path.split('.').pop())
       ? 'audio'
-      : fileMetadata.mimeType.startsWith('video')
+      : fileMetadata?.mimeType?.startsWith('video')
         ? 'video'
         : 'image'
 
@@ -184,13 +199,13 @@ export async function addMedia(selection: MediaSelection | MediaSelection[]) {
         ? fileMetadata?.size <= 1000
         : fileMetadata?.size < 100)
     ) {
-      return null
+      throw new Error(t('media.importInvalid'))
     }
 
     if (mediaType === 'audio') {
       const extension = fileMetadata?.extension?.toLowerCase?.()
       const [audioInfo, coverArt] = await Promise.all([
-        getVideoBasicInfo(path),
+        importStep(t('media.importMetadata'), getVideoBasicInfo(path)),
         // Its cover art, when it has one (a picture stored in the file)
         generateVideoThumbnail(path, '00:00:00.00').catch(() => null),
       ])
@@ -228,8 +243,8 @@ export async function addMedia(selection: MediaSelection | MediaSelection[]) {
       return audioState
     } else if (mediaType === 'video') {
       const [videoInfo, videoThumbnail, dynamicRangeInfo] = await Promise.all([
-        getVideoBasicInfo(path),
-        generateVideoThumbnail(path),
+        importStep(t('media.importMetadata'), getVideoBasicInfo(path)),
+        importStep(t('media.importThumbnail'), generateVideoThumbnail(path)),
         getVideoDynamicRange(path).catch(() => undefined),
       ])
 
@@ -278,12 +293,14 @@ export async function addMedia(selection: MediaSelection | MediaSelection[]) {
       }
 
       // Settings from the default video preset
-      const { config: presetConfig, audioStreams } =
-        await getInitialVideoConfig(videoState.config, {
+      const { config: presetConfig, audioStreams } = await importStep(
+        t('media.importSettings'),
+        getInitialVideoConfig(videoState.config, {
           sourceExtension: videoState.extension,
           path,
           dimensions: videoState.dimensions,
-        })
+        }),
+      )
       videoState.config = presetConfig
       if (audioStreams) {
         videoState.videoInfoRaw = { audioStreams }
@@ -382,6 +399,7 @@ export async function addMedia(selection: MediaSelection | MediaSelection[]) {
   }
 
   let corruptedFilesCount = 0
+  const loadFailures: string[] = []
   let deniedFilesCount = 0
   try {
     for (const { path, relativeDir } of mediaPaths) {
@@ -396,20 +414,30 @@ export async function addMedia(selection: MediaSelection | MediaSelection[]) {
         if (mediaFile) {
           appProxy.state.media.push(mediaFile)
         } else {
-          corruptedFilesCount++
+          throw new Error(t('media.importInvalid'))
         }
       } catch (error) {
+        const reason =
+          error instanceof TimeoutError
+            ? t('media.importTimeout')
+            : error instanceof Error
+              ? error.message
+              : String(error)
+        logError(`Failed to load media ${JSON.stringify(path)}`, reason)
         if (isPermissionDeniedError(error)) {
           deniedFilesCount++
         } else {
           corruptedFilesCount++
+          loadFailures.push(`${path.split(/[\\/]/).pop()}: ${reason}`)
         }
       }
     }
   } finally {
     if (appProxy.state === selectionState && existingMediaCount > 0) {
       // Active and completed items keep their config while the queue grows.
-      normalizeBatchMediaConfig(isAddingWhileCompressing ? existingMediaCount : 0)
+      normalizeBatchMediaConfig(
+        isAddingWhileCompressing ? existingMediaCount : 0,
+      )
       if (isAddingWhileCompressing) {
         for (const mediaFile of selectionState.media.slice(
           existingMediaCount,
@@ -435,6 +463,15 @@ export async function addMedia(selection: MediaSelection | MediaSelection[]) {
   if (corruptedFilesCount > 0) {
     toast.error(
       mediaPaths.length > 1 ? t('media.someCorrupted') : t('media.corrupted'),
+      {
+        description: loadFailures.join('\n\n'),
+        duration: Number.POSITIVE_INFINITY,
+        closeButton: true,
+        classNames: {
+          description:
+            'whitespace-pre-wrap break-words max-h-64 overflow-y-auto',
+        },
+      },
     )
   }
   // Only start over when nothing was selected before

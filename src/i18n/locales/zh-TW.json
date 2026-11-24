@@ -107,6 +107,18 @@
           "description": "App 操作的紀錄，有助於找出問題原因。回報問題時請附上記錄檔。其中包含您壓縮過的檔案名稱。",
           "button": "顯示記錄檔",
           "failed": "無法顯示記錄檔。"
+        },
+        "jobLogs": {
+          "intervalTitle": "效能日誌記錄間隔",
+          "intervalDescription": "記錄效能資料的頻率。適用於新工作。",
+          "interval30": "30 秒",
+          "interval60": "60 秒",
+          "interval300": "5 分鐘",
+          "interval600": "10 分鐘",
+          "retentionTitle": "保留的工作日誌數量",
+          "retentionDescription": "佇列中的每個檔案都算一個工作，包括失敗及已取消的工作。保留最近結束的工作及所有執行中的工作。調低此值會刪除較舊的工作日誌。",
+          "invalidCount": "請輸入 1 到 1000 之間的整數。",
+          "failed": "無法載入或儲存工作日誌設定。"
         }
       }
     },
@@ -850,8 +862,13 @@
     "addAfterCompression": "壓縮完成後無法加入媒體。請開始新的壓縮以加入更多媒體。",
     "noValidFiles": "找不到有效的媒體檔案。",
     "alreadyAdded": "所選媒體已加入。",
-    "someCorrupted": "部分檔案似乎已損毀或無效，未被加入。",
-    "corrupted": "該檔案似乎已損毀或無效。",
+    "someCorrupted": "部分檔案無法載入。原因如下。",
+    "corrupted": "無法載入此檔案。原因如下。",
+    "importMetadata": "讀取中繼資料",
+    "importThumbnail": "產生縮圖",
+    "importSettings": "準備影片設定",
+    "importTimeout": "載入超過了60秒的時限。",
+    "importInvalid": "檔案缺少中繼資料或太小，無法匯入。",
     "selectTitle": "選擇要壓縮的影像、影片或音訊。",
     "selectFailed": "無法選擇媒體。",
     "invalidFiles": "無效的檔案或資料夾",
