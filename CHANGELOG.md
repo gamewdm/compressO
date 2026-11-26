@@ -1,5 +1,11 @@
 # Changelog
 
+### 4.2.0 (custom fork)
+
+- Integrated upstream fix `9a49292` for Windows image import stack overflow.
+- Integrated upstream fix `26811a6` for Windows tray popover file drops.
+- Preserved custom queue additions, export timing, playback behavior, temporary work folder, encoding diagnostics, and video import fixes.
+
 ### 4.1.0
 
 Features:

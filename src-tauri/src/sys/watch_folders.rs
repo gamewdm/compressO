@@ -359,7 +359,7 @@ mod tests {
                 path.strip_prefix(&root)
                     .unwrap()
                     .to_string_lossy()
-                    .to_string()
+                    .replace('\\', "/")
             })
             .collect();
         files.sort();
